@@ -90,8 +90,6 @@ Servers
 Servers/*
 
 # IDE-specific files
-.classpath
-.project
 .settings/
 
 # Build files
