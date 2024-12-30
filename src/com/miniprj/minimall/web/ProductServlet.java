@@ -31,8 +31,7 @@ public class ProductServlet extends HttpServlet {
 
 	
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) 
-			throws ServletException, IOException 
-	{
+			throws ServletException, IOException {
 		
         ProductDAO productDAO = new ProductDAO();
         List<ProductDto> productList = productDAO.listProducts();
@@ -46,8 +45,7 @@ public class ProductServlet extends HttpServlet {
 
 	
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) 
-			throws ServletException, IOException 
-	{
+			throws ServletException, IOException {
 		
 		doGet(request, response);
 	}

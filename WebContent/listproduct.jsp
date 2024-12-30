@@ -8,27 +8,42 @@
 <body>
     <h1>Product List</h1>
     
-    <table>
+    <table border="1">
         <thead>
             <tr>
                 <th>ID</th>
-                <th>Sigun Name</th>
-                <th>Division</th>
-                <th>Enterprise Name</th>
+                <th>Category</th>
                 <th>Product Name</th>
-                <th>Tele</th>
+                <th>Price</th>
+                <th>Stock</th>
+                <th>Local</th>
+                <th>Info</th>
+                <th>Image</th>
+                <th>Cart</th>
             </tr>
         </thead>
         <tbody>
             <!-- 각 제품 정보 출력 -->
             <c:forEach var="product" items="${productList}">
                 <tr>
-                    <td>${product.id}</td>
-                    <td>${product.sigun_nm}</td>
-                    <td>${product.division}</td>
-                    <td>${product.entrps_nm}</td>
-                    <td>${product.prodlist_nm}</td>
-                    <td>${product.telno}</td>
+                    <td>${product.prodId}</td>
+                    <td>${product.prodCategory}</td>
+                    <td>${product.prodName}</td>
+                    <td>${product.prodPrice}</td>
+                    <td>${product.prodStock}</td>
+                    <td>${product.prodLocal}</td>
+                    <td>${product.prodInfo}</td> 
+                    <td><img src="${product.prodImg}" alt="Product Image" width="100" height="100" /></td>
+                    <td>
+                        
+                        <!-- 장바구니 버튼 -->
+                        <form method="post" action="/Cart.do">
+						    <input type="hidden" name="productId" value="${product.prodId}" />
+						    <input type="hidden" name="action" value="addToCart" />
+						    <button type="submit">Add to Cart</button>
+						</form>
+                        
+                    </td>
                 </tr>
             </c:forEach>
         </tbody>
