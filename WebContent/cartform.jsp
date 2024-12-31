@@ -23,43 +23,122 @@
         }
     </style>
     <script>
-        // 모든 체크박스의 체크 상태를 토글
-        function toggleAllCheckboxes(source) {
-            const checkboxes = document.querySelectorAll('.item-checkbox');
-            checkboxes.forEach(checkbox => {
-                checkbox.checked = source.checked;
+
+		//각 가격 업데이트
+	    function changeEachPrice() {
+
+	        document.querySelectorAll('tbody tr').forEach(function(row) {
+	        	
+	            const price = parseInt(row.querySelector('.product-price').innerText, 10);
+	            const quantity = parseInt(row.querySelector('.quantity-input').value, 10);
+	            const totalPriceCell = row.querySelector('.total-price');
+	
+	            totalPriceCell.innerText = quantity*price+"원";
+	        });
+	
+	        changeTotalPayment();
+	    }
+	
+	    //총 결제 금액 업데이트
+	    function changeTotalPayment() {
+	        let totalPaymentNum = 0;
+	
+	        // 체크된 항목들만 합산
+	        document.querySelectorAll('tbody tr').forEach(function(row) {
+	            const checkbox = row.querySelector('.item-checkbox');
+	            const totalPriceCell = row.querySelector('.total-price');
+	            const totalPrice = parseInt(totalPriceCell.innerText.replace('원', ''), 10);
+	
+	            if (checkbox.checked) {
+	                totalPaymentNum += totalPrice;
+	            }
+	        });
+	
+			console.log(totalPaymentNum);
+	        document.getElementById('total-payment').innerText = totalPaymentNum;
+	    }
+	
+	    
+	    
+	 	// 수량 변경 시 cart update
+        function updateCartQuantity(cartId, quantity) {
+
+            fetch('/Cart.do', {
+                method: 'POST',
+                body: new URLSearchParams({
+                    action: 'updateCart',
+                    cartIds: cartId,
+                    quantities: quantity
+                })
+            })
+            .then(data => {
+            	changeEachPrice();
             });
+
         }
+	    
+	    
+	    //ADD EVENT LISTENER
+	    document.addEventListener('DOMContentLoaded', function() {
+
+	        document.querySelectorAll('.quantity-input').forEach(function(input) {
+	        	input.addEventListener('input', function(event) {
+                    const row = event.target.closest('tr');
+                    const cartId = row.querySelector('input[name="cartIds"]').value;
+                    const quantity = event.target.value;
+
+                    updateCartQuantity(cartId, quantity);
+                });
+	        });
+	
+	        document.querySelectorAll('.item-checkbox').forEach(function(input) {
+	            input.addEventListener('change', changeTotalPayment);
+	        });
+	        
+	        
+	        changeTotalPayment();
+	        
+	    });
+
     </script>
 </head>
 <body>
     <h1>장바구니</h1>
     <form action="/Cart.do" method="post">
-	    <input type="hidden" name="action" value="removeCart" />
-	    <table>
-	        <thead>
-	            <tr>
-	                <th><input type="checkbox" onclick="toggleAllCheckboxes(this)" /></th>
-	                <th>상품id</th>
-	                <th>상품명</th>
-	                <th>가격</th>
-	                <th>수량</th>
-	            </tr>
-	        </thead>
-	        <tbody>
-	            <c:forEach var="item" items="${cartList}">
-	                <tr>
-	                    <td><input type="checkbox" name="cartIds" value="${item.cartId}" /></td>
-	                    <td>${item.product.prodId}</td>
-	                    <td>${item.product.prodName}</td>
-	                    <td>${item.product.prodPrice}</td>
-	                    <td><input type="number" name="quantities" value="${item.cartCount}" min="0" /></td>
-	                </tr>
-	            </c:forEach>
-	        </tbody>
-	    </table>
-	    <button type="submit">선택된 항목 제거</button>
-	</form>
+        <input type="hidden" name="action" value="removeCart" />
+        <button type="submit">선택된 항목 제거</button>
+        
+        <table>
+            <thead>
+                <tr>
+                    <th><input type="checkbox" onclick="toggleAllCheckboxes(this)" /></th>
+                    <th>상품id</th>
+                    <th>상품명</th>
+                    <th>가격</th>
+                    <th>수량</th>
+                    <th>총가격</th>
+                </tr>
+            </thead>
+            
+            <tbody>
+                <c:forEach var="item" items="${cartList}">
+                    <tr>
+                        <td><input type="checkbox" name="cartIds" value="${item.cartId}" class="item-checkbox" /></td>
+                        <td>${item.product.prodId}</td>
+                        <td>${item.product.prodName}</td>
+                        <td class="product-price">${item.product.prodPrice}</td>
+                        <td><input type="number" name="quantities" value="${item.cartCount}" min="0" class="quantity-input" /></td>
+                        <td class="total-price">${item.product.prodPrice * item.cartCount}원</td>
+                    </tr>
+                </c:forEach>
+            </tbody>
+        </table>
+        
+        <div id="total-payment">0원</div>
+    </form>
+    
+    <button>purchase</button>
+
 
 
 </body>

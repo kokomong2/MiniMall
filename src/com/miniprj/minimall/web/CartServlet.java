@@ -86,7 +86,7 @@ int custID=1;
      }
 
      // 장바구니 페이지로 리다이렉트
-     //response.sendRedirect("/Cart.do");
+     response.sendRedirect("/Cart.do");
  }
 
 
