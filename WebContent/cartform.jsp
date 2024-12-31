@@ -23,7 +23,19 @@
         }
     </style>
     <script>
-
+    
+    
+	    function toggleAllCheckboxes(source) {
+	        const checkboxes = document.querySelectorAll('.item-checkbox');
+	        checkboxes.forEach(function(checkbox) {
+	            checkbox.checked = source.checked;
+	            
+	        });
+	        
+	        changeTotalPayment();
+	    }
+	    
+	    //PRICE UPDATE/////////////////////////////////////////////////////////////////////
 		//각 가격 업데이트
 	    function changeEachPrice() {
 
@@ -60,7 +72,7 @@
 	
 	    
 	    
-	 	// 수량 변경 시 cart update
+	 	//CART UPDATE/////////////////////////////////////////////////////////////////
         function updateCartQuantity(cartId, quantity) {
 
             fetch('/Cart.do', {
@@ -76,11 +88,28 @@
             });
 
         }
+	 	//REMOVE FROM CART////////////////////////////////////////////////////////////
+        function removeItem(cartId) {
+
+            fetch('/Cart.do', {
+                method: 'POST',
+                body: new URLSearchParams({
+                    action: 'removeCart',
+                    cartIds: cartId
+                })
+            })
+            .then(response => {
+                // 삭제 후 페이지 새로 고침
+                location.reload(); // window.location.href = '/Cart.do';
+            });
+        }
+        
 	    
 	    
-	    //ADD EVENT LISTENER
+	    //ADD EVENT LISTENER/////////////////////////////////////////////////////////////
 	    document.addEventListener('DOMContentLoaded', function() {
 
+	    	//quantity input
 	        document.querySelectorAll('.quantity-input').forEach(function(input) {
 	        	input.addEventListener('input', function(event) {
                     const row = event.target.closest('tr');
@@ -91,8 +120,18 @@
                 });
 	        });
 	
+	        //check box
 	        document.querySelectorAll('.item-checkbox').forEach(function(input) {
 	            input.addEventListener('change', changeTotalPayment);
+	        });
+	        
+	        //delete button
+	        document.querySelectorAll('.delete-btn').forEach(function(button) {
+	            button.addEventListener('click', function(event) {
+	                event.preventDefault(); // 기본 폼 전송을 막음
+	                const cartId = event.target.getAttribute('data-cart-id');
+	                removeItem(cartId);
+	            });
 	        });
 	        
 	        
@@ -105,9 +144,7 @@
 <body>
     <h1>장바구니</h1>
     <form action="/Cart.do" method="post">
-        <input type="hidden" name="action" value="removeCart" />
-        <button type="submit">선택된 항목 제거</button>
-        
+
         <table>
             <thead>
                 <tr>
@@ -117,6 +154,7 @@
                     <th>가격</th>
                     <th>수량</th>
                     <th>총가격</th>
+                    <th>delete</th>
                 </tr>
             </thead>
             
@@ -129,6 +167,7 @@
                         <td class="product-price">${item.product.prodPrice}</td>
                         <td><input type="number" name="quantities" value="${item.cartCount}" min="0" class="quantity-input" /></td>
                         <td class="total-price">${item.product.prodPrice * item.cartCount}원</td>
+                        <td><button type="button" class="delete-btn" data-cart-id="${item.cartId}">delete</button></td>
                     </tr>
                 </c:forEach>
             </tbody>
