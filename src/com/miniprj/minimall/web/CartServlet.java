@@ -3,6 +3,7 @@ package com.miniprj.minimall.web;
 import java.io.IOException;
 import java.util.List;
 
+import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -29,7 +30,10 @@ public class CartServlet extends HttpServlet
 	     List<CartDto> cartList = cartDao.listCartWithProductInfo(custID);//이거 custID로 변경해야함
 	
 	     request.setAttribute("cartList", cartList);
-	     request.getRequestDispatcher("/cartform.jsp").forward(request, response);
+	     //request.getRequestDispatcher("/cartform.jsp").forward(request, response);
+	     
+	     RequestDispatcher disp=request.getRequestDispatcher("/WEB-INF/views/cartform.jsp");
+		 disp.forward(request, response);
 	 }
 	
 	 
@@ -84,29 +88,12 @@ public class CartServlet extends HttpServlet
 	             int quantity = Integer.parseInt(quantities[i]);
 	             cartDao.updateCart((long)cartId, quantity);  // 수량 업데이트
 	         }
-     }
-
-     // 장바구니 페이지로 리다이렉트
-     response.sendRedirect("/Cart.do");
- }
-
-	/*//선택한 여러개 삭제
-	 private void removeFromCart(HttpServletRequest request, HttpServletResponse response)
-	    throws ServletException, IOException {
-	    String[] cartIds = request.getParameterValues("cartIds");
-	    
-	   
-	    if (cartIds != null) {
-	        CartDao cartDao = new CartDao();
-	        for (String cartId : cartIds) {
-	            cartDao.removeCart(Integer.parseInt(cartId), custID);
-	        }
-	    }
+	     }
 	
-	    // 장바구니 페이지로 리다이렉트
-	    response.sendRedirect("/Cart.do");
-	}
-	 */
+	     // 장바구니 페이지로 리다이렉트
+	     response.sendRedirect("/Cart.do");
+	 }
+
  	
  	
 	//선택한 한개만 삭제

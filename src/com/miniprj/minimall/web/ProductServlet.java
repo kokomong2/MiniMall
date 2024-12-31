@@ -3,6 +3,7 @@ package com.miniprj.minimall.web;
 import java.io.IOException;
 import java.util.List;
 
+import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletConfig;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -40,7 +41,8 @@ public class ProductServlet extends HttpServlet {
         request.setAttribute("productList", productList);
 
         // forwarding
-        request.getRequestDispatcher("/listproduct.jsp").forward(request, response);
+        RequestDispatcher disp=request.getRequestDispatcher("/WEB-INF/views/listproduct.jsp");
+		disp.forward(request, response);
 	}
 
 	
