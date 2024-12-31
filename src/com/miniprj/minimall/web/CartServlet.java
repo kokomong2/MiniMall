@@ -56,8 +56,8 @@ public class CartServlet extends HttpServlet
 	     {
 	         // 장바구니에 상품을 추가
 	    	 int prod_id = Integer.parseInt(request.getParameter("productId"));
-		     int cust_id = 1;//수정!!!
-		     int cart_quantity = 1;//수정!!!
+		     int cust_id = Integer.parseInt(request.getParameter("custId"));
+		     int cart_quantity = Integer.parseInt(request.getParameter("cartQuantity"));
 		     
 		     // 장바구니에 추가
 		     CartDao cartDao = new CartDao();

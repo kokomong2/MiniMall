@@ -35,14 +35,24 @@ public class ProductServlet extends HttpServlet {
 			throws ServletException, IOException {
 		
         ProductDAO productDAO = new ProductDAO();
-        List<ProductDto> productList = productDAO.listProducts();
+        String action = request.getParameter("action");
+        
+        if("list".equals(action))
+        {
+        	List<ProductDto> productList = productDAO.listProducts();
 
-        // 제품 목록을 request 객체에 저장
-        request.setAttribute("productList", productList);
+            // 제품 목록을 request 객체에 저장
+            request.setAttribute("productList", productList);
 
-        // forwarding
-        RequestDispatcher disp=request.getRequestDispatcher("/WEB-INF/views/listproduct.jsp");
-		disp.forward(request, response);
+            // forwarding
+            RequestDispatcher disp=request.getRequestDispatcher("/WEB-INF/views/listproduct.jsp");
+    		disp.forward(request, response);
+        }
+        else if("detail".equals(action))
+        {
+        	RequestDispatcher disp=request.getRequestDispatcher("/WEB-INF/views/productdetailtestform.jsp");
+    		disp.forward(request, response);	
+        }		
 	}
 
 	
