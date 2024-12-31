@@ -12,5 +12,7 @@ public class CustomerDto {
 	private String cust_email;
 	private String cust_password;
 	private String cust_phone_num;
+	private String cust_postcode;
 	private String cust_address;
+	private String cust_detail_address;
 }

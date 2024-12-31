@@ -1,6 +1,8 @@
 package com.miniprj.minimall.web;
 
 import java.io.IOException;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
@@ -25,8 +27,14 @@ public class SignupServlet extends HttpServlet {
 		String view = "index.jsp";
 		
 		if("signupform".equals(action) || action==null) {
-			request.setAttribute("action", "insert");
+			request.setAttribute("action", "signup");
 			view = "auth/signupform.jsp";
+		} else if("checkemail".equals(action)) {
+			String cust_email = request.getParameter("cust_email");
+            boolean isEmailUsed = dao.checkEmail(cust_email);
+            response.setContentType("application/json");
+            response.getWriter().write("{\"emailUsed\": " + isEmailUsed + "}");
+            return;
 		}
 		
 		RequestDispatcher disp = request.getRequestDispatcher("/WEB-INF/views/" + view);
@@ -37,21 +45,40 @@ public class SignupServlet extends HttpServlet {
 		request.setCharacterEncoding("utf-8");
 		String action = request.getParameter("action");
 		
-		if("insert".equals(action)) {
+		if("signup".equals(action)) {
 			String cust_name = request.getParameter("cust_name");
 			String cust_email = request.getParameter("cust_email");
 			String cust_password = request.getParameter("cust_password");
 			String cust_phone_num = request.getParameter("cust_phone_num");
+			String cust_postcode = request.getParameter("cust_postcode");
 			String cust_address = request.getParameter("cust_address");
-			CustomerDto customer = new CustomerDto(cust_name, cust_email, cust_password, cust_phone_num, cust_address);
+			String cust_detail_address = request.getParameter("cust_detail_address");
+			String encryptedPassword = encryptPassword(cust_password);
+			CustomerDto customer = new CustomerDto(cust_name, cust_email, encryptedPassword, cust_phone_num, cust_postcode, cust_address, cust_detail_address);
 			try {
-				dao.insertMember(customer);
-				response.sendRedirect("/Login.do");
+				dao.signup(customer);
+				response.sendRedirect("/auth/Login.do?action=loginform");
 				return;
 			}catch(Exception e) {
 				throw new RuntimeException(e);
 			}
 		}
 	}
+	
+	private String encryptPassword(String password) {
+        try {
+            MessageDigest digest = MessageDigest.getInstance("SHA-256");
+            byte[] hash = digest.digest(password.getBytes());
+            StringBuilder hexString = new StringBuilder();
+            
+            for (byte b : hash) {
+                hexString.append(String.format("%02x", b));
+            }
+            
+            return hexString.toString();
+        } catch (NoSuchAlgorithmException e) {
+            throw new RuntimeException("SHA-256 알고리즘이 지원되지 않습니다.", e);
+        }
+    }
 
 }
