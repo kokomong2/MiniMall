@@ -25,7 +25,7 @@ public class CartDao {
         }
     }
 
-    // 장바구니 목록 조회
+    // 장바구니 목록만 조회
     /*
     public List<CartDto> listCart(int custId) {
     	
@@ -53,13 +53,7 @@ public class CartDao {
         } catch (Exception e) {
             throw new RuntimeException("CartDao listCart error=" + e.getMessage());
         } finally {
-            try {
-                if (rs != null) rs.close();
-                if (pstmt != null) pstmt.close();
-                if (con != null) con.close();
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
+            closeResources(rs,pstmt,con);
         }
 
         return cartList;
@@ -86,7 +80,7 @@ public class CartDao {
             if (rs.next()) {
 
                 int currentQuantity = rs.getInt("CART_COUNT");
-                int newQuantity = currentQuantity + quantity; // 기존 수량에 추가된 수량 더하기
+                int newQuantity = currentQuantity + quantity;
 
                 String updateSql = "UPDATE CART SET CART_COUNT = ? WHERE PROD_ID = ? AND CUST_ID = ?";
                 pstmt = con.prepareStatement(updateSql);
@@ -116,20 +110,14 @@ public class CartDao {
         } catch (Exception e) {
             throw new RuntimeException("CartDao addCart error=" + e.getMessage());
         } finally {
-            try {
-                if (rs != null) rs.close();
-                if (pstmt != null) pstmt.close();
-                if (con != null) con.close();
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
+        	closeResources(rs,pstmt,con);
         }
     }
 
 
 
 
-    // 장바구니 항목 제거
+    // 장바구니 특정 항목 제거
     public void removeCart(int cartId, int custId) {
         Connection con = null;
         PreparedStatement pstmt = null;
@@ -137,27 +125,24 @@ public class CartDao {
         try {
         	
             con = ds.getConnection();
-            String sql = "DELETE FROM cart WHERE cart_id = ? AND cust_id = ?";
+            String sql = "DELETE FROM cart WHERE cart_id = ?";
             
             pstmt = con.prepareStatement(sql);
             pstmt.setInt(1, cartId);
-            pstmt.setInt(2, custId);
             pstmt.executeUpdate();
             
         } catch (Exception e) {
             throw new RuntimeException("CartDao removeCart error=" + e.getMessage());
         } finally {
-            try {
-                if (pstmt != null) pstmt.close();
-                if (con != null) con.close();
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
+        	closeResources(null,pstmt,con);
         }
     }
     
 
+    
+    
 
+    
     public void updateCart(Long long1, int cartCount) {
         Connection con = null;
         PreparedStatement pstmt = null;
@@ -173,43 +158,13 @@ public class CartDao {
         } catch (Exception e) {
             throw new RuntimeException("CartDao updateCart error=" + e.getMessage());
         } finally {
-            try {
-                if (pstmt != null) pstmt.close();
-                if (con != null) con.close();
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
+        	closeResources(null,pstmt,con);
         }
     }
 
-    // 선택된 항목 삭제
-    public void removeSelectedItems(List<Long> cartIds) {
-        Connection con = null;
-        PreparedStatement pstmt = null;
-
-        try {
-            con = ds.getConnection();
-            String sql = "DELETE FROM cart WHERE cart_id = ?";
-            pstmt = con.prepareStatement(sql);
-
-            for (Long cartId : cartIds) {
-                pstmt.setLong(1, cartId);
-                pstmt.addBatch();
-            }
-            
-            pstmt.executeBatch();
-        } catch (Exception e) {
-            throw new RuntimeException("CartDao removeSelectedItems error=" + e.getMessage());
-        } finally {
-            try {
-                if (pstmt != null) pstmt.close();
-                if (con != null) con.close();
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-        }
-    }
     
+    
+    //장바구니+상품정보 조회
     public List<CartDto> listCartWithProductInfo(int custId) {
         List<CartDto> cartList = new ArrayList<>();
         Connection con = null;
@@ -239,64 +194,30 @@ public class CartDao {
         } catch (Exception e) {
             throw new RuntimeException("CartDao listCartWithProductInfo error=" + e.getMessage());
         } finally {
-            try {
-                if (rs != null) rs.close();
-                if (pstmt != null) pstmt.close();
-                if (con != null) con.close();
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
+        	closeResources(rs,pstmt,con);
         }
         return cartList;
     }
 
+    // 상품 정보를 조회
     private ProductDto getProductById(long prodId) {
-        // ProductDao에서 상품 정보를 조회하는 로직
         ProductDAO productDao = new ProductDAO();
         return productDao.getProductById(prodId);
     }
 
 
     
-    public void updateCartQuantity(int cartId, int quantity, int customerId) {
-        Connection con = null;
-        PreparedStatement pstmt = null;
 
+    //리소스 정리
+    private void closeResources(ResultSet rs, PreparedStatement pstmt, Connection con) {
         try {
-            // 데이터베이스 연결
-            con = ds.getConnection();
-
-            // 장바구니 수량 업데이트 쿼리
-            String sql = "UPDATE cart SET cart_count = ? WHERE cart_id = ? AND cust_id = ?";
-
-            // PreparedStatement 준비
-            pstmt = con.prepareStatement(sql);
-            pstmt.setInt(1, quantity);  // 새 수량
-            pstmt.setInt(2, cartId);    // 장바구니 ID
-            pstmt.setInt(3, customerId); // 고객 ID
-
-            // 쿼리 실행
-            int rowsUpdated = pstmt.executeUpdate();
-
-            // 업데이트된 행 수 확인 (선택 사항)
-            if (rowsUpdated > 0) {
-                System.out.println("Cart quantity updated successfully.");
-            } else {
-                System.out.println("No cart item found to update.");
-            }
+            if (rs != null) rs.close();
+            if (pstmt != null) pstmt.close();
+            if (con != null) con.close();
         } catch (Exception e) {
-            throw new RuntimeException("CartDao updateCartQuantity error=" + e.getMessage(), e);
-        } finally {
-            // 리소스 정리
-            try {
-                if (pstmt != null) pstmt.close();
-                if (con != null) con.close();
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
+            e.printStackTrace();
         }
     }
-
 
     
     

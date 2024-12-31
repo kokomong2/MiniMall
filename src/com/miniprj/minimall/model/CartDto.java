@@ -15,14 +15,5 @@ public class CartDto {
     private Long prodId;      // 상품 ID
     private ProductDto product;  // 추가된 필드: 상품 정보
 
-    // getters and setters for product
-    public ProductDto getProduct() {
-        return product;
-    }
-
-    public void setProduct(ProductDto product) {
-        this.product = product;
-    }
-
 }
 

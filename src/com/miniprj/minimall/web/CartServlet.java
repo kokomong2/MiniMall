@@ -81,7 +81,7 @@ int custID=1;
          for (int i = 0; i < cartIds.length; i++) {
              int cartId = Integer.parseInt(cartIds[i]);
              int quantity = Integer.parseInt(quantities[i]);
-             cartDao.updateCartQuantity(cartId, quantity,custID);  // 수량 업데이트
+             cartDao.updateCart((long)cartId, quantity);  // 수량 업데이트
          }
      }
 

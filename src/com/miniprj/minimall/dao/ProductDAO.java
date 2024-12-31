@@ -42,15 +42,14 @@ public class ProductDAO {
             while (rs.next()) {
                 ProductDto product = new ProductDto();
                 
-                // 값 설정
                 product.setProdId(rs.getLong("PROD_ID"));
                 product.setProdCategory(rs.getString("PROD_CATEGORY"));
                 product.setProdName(rs.getString("PROD_NAME"));
                 product.setProdPrice(rs.getBigDecimal("PROD_PRICE"));
                 product.setProdStock(rs.getLong("PROD_STOCK"));
                 product.setProdLocal(rs.getString("PROD_LOCAL"));
-                product.setProdInfo(rs.getString("PROD_INFO"));  // CLOB 처리, 필요시 CLOB 전용 처리 필요
-                product.setProdImg(rs.getString("PROD_IMG"));    // CLOB 처리, 필요시 CLOB 전용 처리 필요
+                product.setProdInfo(rs.getString("PROD_INFO"));
+                product.setProdImg(rs.getString("PROD_IMG"));
 
                 // 리스트에 추가
                 productList.add(product);
@@ -81,12 +80,12 @@ public class ProductDAO {
         	conn = ds.getConnection();
             String sql = "SELECT PROD_ID, PROD_CATEGORY, PROD_NAME, PROD_PRICE, PROD_STOCK, PROD_LOCAL, PROD_INFO, PROD_IMG FROM product WHERE PROD_ID = ?";
             pstmt = conn.prepareStatement(sql);
-            pstmt.setLong(1, prodId);  // prodId를 쿼리 파라미터로 설정
+            pstmt.setLong(1, prodId);
 
             rs = pstmt.executeQuery();
 
             if (rs.next()) {
-                // 결과가 있으면 ProductDto 객체에 데이터를 매핑
+                // 결과가 있으면 
                 product = new ProductDto();
                 product.setProdId(rs.getLong("PROD_ID"));
                 product.setProdCategory(rs.getString("PROD_CATEGORY"));
@@ -109,7 +108,7 @@ public class ProductDAO {
                 e.printStackTrace();
             }
         }
-        return product;  // 조회된 상품 정보를 반환
+        return product;  // 조회 상품 정보 반환
     }
 	
 
