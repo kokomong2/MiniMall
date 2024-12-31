@@ -75,9 +75,11 @@ public class AuthServlet extends HttpServlet {
 		String cust_email = request.getParameter("cust_email");
 		String cust_password = request.getParameter("cust_password");
 		String cust_phone_num = request.getParameter("cust_phone_num");
+		String cust_postcode = request.getParameter("cust_postcode");
 		String cust_address = request.getParameter("cust_address");
+		String cust_detail_address = request.getParameter("cust_detail_address");
 		
-		CustomerDto customer = new CustomerDto(cust_name, cust_email, cust_password, cust_phone_num, cust_address);
+		CustomerDto customer = new CustomerDto(cust_name, cust_email, cust_password, cust_phone_num, cust_postcode, cust_address, cust_detail_address);
 		
 		response.setContentType("text/html; charset=utf-8");
 		
@@ -85,7 +87,7 @@ public class AuthServlet extends HttpServlet {
 			System.out.println("cust_name: " + cust_name); // 인코딩 확인용
 			System.out.println("cust_address: " + cust_address); // 인코딩 확인용
 
-			customerDao.insert(customer);
+			customerDao.sinup(customer);
 			response.sendRedirect("/auth/Auth.do?action=loginform");
 		}catch(Exception e) {
             request.setAttribute("errorMessage", "회원가입 중 오류가 발생했습니다: " + e.getMessage());

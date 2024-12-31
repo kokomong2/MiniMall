@@ -28,18 +28,20 @@ public class CustomerDao {
         return con;
     }
 
-    public void insert(CustomerDto customer) {
+    public void sinup(CustomerDto customer) {
         Connection con = null;
         PreparedStatement pstmt = null;
         try {
             con = getConnection();
-            String sql = "insert into customer(cust_name, cust_email, cust_password, cust_phone_num, cust_address) values(?, ?, ?, ?, ?)";
+            String sql = "insert into customer(cust_name, cust_email, cust_password, cust_phone_num, cust_postcode, cust_address, cust_detail_address) values(?, ?, ?, ?, ?, ?, ?)";
             pstmt = con.prepareStatement(sql);
             pstmt.setString(1, customer.getCust_name());
             pstmt.setString(2, customer.getCust_email());
             pstmt.setString(3, customer.getCust_password());
             pstmt.setString(4, customer.getCust_phone_num());
-            pstmt.setString(5, customer.getCust_address());
+            pstmt.setString(5, customer.getCust_postcode());
+            pstmt.setString(6, customer.getCust_address());
+            pstmt.setString(7, customer.getCust_detail_address());
             System.out.println("Executing SQL: " + sql);
             int rowCount = pstmt.executeUpdate();
             if (rowCount != 1) {
@@ -72,7 +74,9 @@ public class CustomerDao {
                     rs.getString("cust_email"),
                     rs.getString("cust_password"),
                     rs.getString("cust_phone_num"),
-                    rs.getString("cust_address")
+                    rs.getString("cust_postcode"),
+                    rs.getString("cust_address"),
+                    rs.getString("cust_detail_address")
                 );
             }
         } catch (Exception e) {
@@ -85,6 +89,32 @@ public class CustomerDao {
 
         return null; // 사용자 없음
     }
+
+	public void editCustomerInfo(CustomerDto customer) {
+        Connection con = null;
+        PreparedStatement pstmt = null;
+        try {
+            con = getConnection();
+            String sql = "UPDATE customer SET cust_phone_num = ?, cust_postcode = ?, cust_address = ?, cust_detail_address = ? WHERE cust_email = ?";
+            pstmt = con.prepareStatement(sql);
+            pstmt.setString(1, customer.getCust_phone_num());
+            pstmt.setString(2, customer.getCust_postcode());
+            pstmt.setString(3, customer.getCust_address());
+            pstmt.setString(4, customer.getCust_detail_address());
+            pstmt.setString(5, customer.getCust_email());
+            System.out.println("Executing SQL: " + sql);
+            int rowCount = pstmt.executeUpdate();
+            if (rowCount != 1) {
+                throw new SQLException("No rows affected");
+            }
+        } catch (Exception e) {
+            throw new RuntimeException("CustomerDao.insert() : SQL Error - " + e.getMessage(), e);
+        } finally {
+            if (pstmt != null) try { pstmt.close(); } catch (Exception e) {}
+            if (con != null) try { con.close(); } catch (Exception e) {}
+        }
+		
+	}
 
 	
 	

@@ -4,6 +4,10 @@
 <head>
 <meta charset="UTF-8">
 <title>Insert title here</title>
+<!-- Daum API 스크립트 -->
+<script src="//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
+<!-- 로컬 스크립트 불러오기 -->
+<script src="/js/daumPostcode.js"></script>
 </head>
 <body>
 <h1>회원가입 폼</h1>
@@ -33,8 +37,14 @@
 		 </tr>
 		 <tr>
 			 <td class="label" for="cust_address">주 소</td>
-			 <td class="field"><input type="text" name="cust_address" size="50"></td>
+			 <td class="field">
+				<input type="text" id="sample6_postcode" name="cust_postcode" placeholder="우편번호">
+				<input type="button" onclick="sample6_execDaumPostcode()" value="우편번호 찾기"><br>
+				<input type="text" id="sample6_address" name="cust_address" placeholder="주소">
+				<input type="text" id="sample6_detailAddress" name="cust_detail_address" placeholder="상세주소">
+			 </td>
 		 </tr>
+		 
 	 </table>
 	<input type="submit" value="  저 장  "> 
 	<input type="reset" value="  취  소  ">
