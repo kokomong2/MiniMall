@@ -17,99 +17,90 @@ import com.miniprj.minimall.model.CartDto;
 @WebServlet("/Cart.do")
 public class CartServlet extends HttpServlet 
 {
-	 private static final long serialVersionUID = 1L;
-	
+	 
+	 
 	 public CartServlet() {
 	     super();
 	 }
-	int custID=1;
+	
+	 
 	
 	 protected void doGet(HttpServletRequest request, HttpServletResponse response) 
-	         throws ServletException, IOException {
-	     CartDao cartDao = new CartDao();
-	     List<CartDto> cartList = cartDao.listCartWithProductInfo(custID);//이거 custID로 변경해야함
-	
-	     request.setAttribute("cartList", cartList);
-	     //request.getRequestDispatcher("/cartform.jsp").forward(request, response);
-	     
-	     RequestDispatcher disp=request.getRequestDispatcher("/WEB-INF/views/cartform.jsp");
-		 disp.forward(request, response);
+	         throws ServletException, IOException 
+	 {
+		 CartDao cartDao = new CartDao();
+		 String action = request.getParameter("action");
+		 
+		 if("list".equals(action))
+		 {
+			 int cust_id=1;//임시로 회원 정함
+			 List<CartDto> cartList = cartDao.listCartWithProductInfo(cust_id);
+		     request.setAttribute("cartList", cartList);
+		     
+		     RequestDispatcher disp=request.getRequestDispatcher("/WEB-INF/views/cartform.jsp");
+			 disp.forward(request, response);
+		 }
 	 }
 	
+	 
+	 
+	 
 	 
 	 @Override
 	 protected void doPost(HttpServletRequest request, HttpServletResponse response)
 	         throws ServletException, IOException 
 	 {
-	     String action = request.getParameter("action");  // 어떤 동작인지 구분
+	     String action = request.getParameter("action");
 	
-	     if ("addToCart".equals(action)) {
+	     if ("addCart".equals(action)) 
+	     {
 	         // 장바구니에 상품을 추가
-	         addToCart(request, response);
-	     } else if ("updateCart".equals(action)) {
-	         // 장바구니 수량을 업데이트
-	         updateCart(request, response);
-	     } else if ("removeCart".equals(action)) {
+	    	 int prod_id = Integer.parseInt(request.getParameter("productId"));
+		     int cust_id = 1;//수정!!!
+		     int cart_quantity = 1;//수정!!!
+		     
+		     // 장바구니에 추가
+		     CartDao cartDao = new CartDao();
+		     cartDao.addCart( prod_id, cart_quantity, cust_id);
+		     
+		     response.sendRedirect("/Cart.do?action=list");
+	     } 
+	     else if ("updateCart".equals(action)) 
+	     {
+	    	 String cart_id=request.getParameter("cartId");
+	    	 String cart_quantity=request.getParameter("quantity");
+	    	 
+	    	 if(cart_id!=null&& cart_quantity!=null)
+	    	 {
+	    		 CartDao cartDao=new CartDao();
+	    		 cartDao.updateCart(Long.parseLong(cart_id), Integer.parseInt(cart_quantity));
+	    	 }
+	    	 
+		     response.sendRedirect("/Cart.do?action=list");
+	     } 
+	     else if ("removeCart".equals(action)) 
+	     {
 	         // 장바구니에서 상품을 제거
-	         removeFromCart(request, response);
-	     } else {
-	         // 장바구니 목록을 보여주는
+	    	 int cart_id = Integer.parseInt(request.getParameter("cartId"));
+	 	     int cust_id=Integer.parseInt("1");//수정!!!
+	 	     
+	 	     try {
+	 	    	 CartDao cartDao = new CartDao();
+	 	         cartDao.removeCart(cart_id, cust_id);
+			} catch (Exception e) {
+				// TODO: handle exception
+			}
+	 	     
+	 	     response.sendRedirect("/Cart.do?action=list");
+	     } 
+	     else 
+	     {
+	         // 장바구니 목록
 	         doGet(request, response);
 	     }
 	 }
 
 
-	 private void addToCart(HttpServletRequest request, HttpServletResponse response)
-	         throws ServletException, IOException 
-	 {
-	     int productId = Integer.parseInt(request.getParameter("productId"));
-	     int customerId = 1;
-	     int quantity = 1;
-	     
-	     // 장바구니에 추가
-	     CartDao cartDao = new CartDao();
-	     cartDao.addCart(productId, quantity, customerId);  // DB에 장바구니 추가
-	     
-	     response.sendRedirect("/Cart.do");
-	 }
-
-
- 	private void updateCart(HttpServletRequest request, HttpServletResponse response)
-         throws ServletException, IOException {
-	 
-	     // 요청에서 수량 정보 추출
-	     String[] cartIds = request.getParameterValues("cartIds");
-	     String[] quantities = request.getParameterValues("quantities");
-	
-	     if (cartIds != null && quantities != null) {
-	         CartDao cartDao = new CartDao();
-	         for (int i = 0; i < cartIds.length; i++) {
-	             int cartId = Integer.parseInt(cartIds[i]);
-	             int quantity = Integer.parseInt(quantities[i]);
-	             cartDao.updateCart((long)cartId, quantity);  // 수량 업데이트
-	         }
-	     }
-	
-	     // 장바구니 페이지로 리다이렉트
-	     response.sendRedirect("/Cart.do");
-	 }
-
- 	
- 	
-	//선택한 한개만 삭제
- 	private void removeFromCart(HttpServletRequest request, HttpServletResponse response)
-	    throws ServletException, IOException {
-	    String cartId = request.getParameter("cartIds");
-	    
-	    if (cartId != null) {
-	        CartDao cartDao = new CartDao();
-	        cartDao.removeCart(Integer.parseInt(cartId), custID);
-	    }
-
-	    response.sendRedirect("/Cart.do");
-	}
-
- 
 
 
 }

@@ -15,6 +15,6 @@ public class ProductDto {
     private BigDecimal prodPrice;   // 상품 가격
     private Long prodStock;         // 상품 재고
     private String prodLocal;       // 상품 지역
-    private String prodInfo;        // 상품 정보 (CLOB)
-    private String prodImg;         // 상품 이미지 (CLOB)  
+    private String prodInfo;        // 상품 정보
+    private String prodImg;         // 상품 이미지 
 }

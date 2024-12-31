@@ -13,7 +13,7 @@ public class CartDto {
     private Long cartCount;   // 장바구니에 담긴 상품 수량
     private Long custId;      // 고객 ID
     private Long prodId;      // 상품 ID
-    private ProductDto product;  // 추가된 필드: 상품 정보
+    private ProductDto product;
 
 }
 

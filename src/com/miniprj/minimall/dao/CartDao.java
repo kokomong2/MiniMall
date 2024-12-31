@@ -143,7 +143,7 @@ public class CartDao {
     
 
     
-    public void updateCart(Long long1, int cartCount) {
+    public void updateCart(Long cartId, int cartCount) {
         Connection con = null;
         PreparedStatement pstmt = null;
 
@@ -152,7 +152,7 @@ public class CartDao {
             String sql = "UPDATE cart SET cart_count = ? WHERE cart_id = ?";
             pstmt = con.prepareStatement(sql);
             pstmt.setInt(1, cartCount);
-            pstmt.setLong(2, long1);
+            pstmt.setLong(2, cartId);
 
             pstmt.executeUpdate();
         } catch (Exception e) {

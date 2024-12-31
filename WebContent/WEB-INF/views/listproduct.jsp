@@ -34,16 +34,16 @@
                     <td>${product.prodLocal}</td>
                     <td>${product.prodInfo}</td> 
                     <td><img src="${product.prodImg}" alt="Product Image" width="100" height="100" /></td>
+                    
+                    <!-- 장바구니 버튼 -->
                     <td>
-                        
-                        <!-- 장바구니 버튼 -->
                         <form method="post" action="/Cart.do">
 						    <input type="hidden" name="productId" value="${product.prodId}" />
-						    <input type="hidden" name="action" value="addToCart" />
+						    <input type="hidden" name="action" value="addCart" />
 						    <button type="submit">Add to Cart</button>
 						</form>
-                        
                     </td>
+                    
                 </tr>
             </c:forEach>
         </tbody>
