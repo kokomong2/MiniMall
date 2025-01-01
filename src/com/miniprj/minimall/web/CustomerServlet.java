@@ -31,6 +31,7 @@ public class CustomerServlet extends HttpServlet {
 		if ("mypageEditForm".equals(action)) {
 			showEditCustomerForm(request, response);
 		}
+		
 	}
 	
 	// 내 정보 수정 폼
