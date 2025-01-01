@@ -11,7 +11,6 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import com.miniprj.minimall.dao.CustomerDao;
-import com.miniprj.minimall.model.CustomerDto;
 
 @WebServlet("/auth/Login.do")
 public class LoginServlet extends HttpServlet {
