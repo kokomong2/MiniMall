@@ -50,10 +50,147 @@
             border-radius: 4px;
         }
 
-        input[type="checkbox"] {
-            transform: scale(1.2);
-        }
+		 /* Check box /////////////////////////////////////////////////////// */
+        [type=checkbox] {
+		    width: 1.5rem;
+		    height: 1.5rem;
+		    color: black; /*black!!!!*/
+		    vertical-align: middle;
+		    -webkit-appearance: none;
+		    background: none;
+		    border: 0;
+		    outline: 0;
+		    flex-grow: 0;
+		    border-radius: 50%;
+		    background-color: #7B7B7B;
+		    transition: background 300ms;
+		    cursor: pointer;
+		    position: relative;
+		}
+		
+		/* Pseudo element for check styling */
+		[type=checkbox]::before {
+		    content: "";
+		    display: block;
+		    width: inherit;
+		    height: inherit;
+		    border-radius: inherit;
+		    background-color: transparent;
+		    box-shadow: inset 0 0 0 1px #CCD3D8;
+		    position: relative;
+		}
+		
+		/* Checked */
+		[type=checkbox]:checked {
+		    background-color: currentcolor;
+		}
+		
+		[type=checkbox]:checked::before {
+		    box-shadow: none;
+		    background-color: #4CAF50; /* Green background for checked */
+		}
+		
+		/* Add the checkmark directly using pseudo-element */
+		[type=checkbox]:checked::after {
+		    content: "✔"; /* Checkmark symbol */
+		    position: absolute;
+		    top: 50%;
+		    left: 50%;
+		    font-size: 1.2rem; /* Adjust checkmark size */
+		    color: white; /* White color for the checkmark */
+		    transform: translate(-50%, -50%); /* Center the checkmark */
+		}
+		
+		/* Disabled */
+		[type=checkbox]:disabled {
+		    background-color: #CCD3D8; /*gray*/
+		    opacity: 0.84;
+		    cursor: not-allowed;
+		}
+		
+		/* IE */
+		[type=checkbox]::-ms-check {
+		    content: "";
+		    color: transparent;
+		    display: block;
+		    width: inherit;
+		    height: inherit;
+		    border-radius: inherit;
+		    border: 0;
+		    background-color: transparent;
+		    background-size: contain;
+		    box-shadow: inset 0 0 0 1px #CCD3D8; /*gray*/
+		}
+		
+		[type=checkbox]:checked::-ms-check {
+		    box-shadow: none;
+		    background-color: #4CAF50; /* Green background for checked */
+		}
+		
+		/*Quantity number/////////////////////////////////////////////////////*/
+		.quantity-container {
+		    display: flex;
+		    align-items: center;
+		    width: 100%; /* 적절한 너비 설정 */
+		}
+		
+		.quantity-input {
+		    width: 60px;
+		    padding: 5px;
+		    text-align: center;
+		    border: 1px solid #ccc;
+		    border-radius: 4px;
+		    font-size: 1rem;
+		    position: relative;
+		}
+		
+		/* 증감 버튼을 위한 스타일 */
+		.quantity-input::before,
+		.quantity-input::after {
+		    content: "";
+		    position: absolute;
+		    top: 50%;
+		    transform: translateY(-50%);
+		    width: 20px;
+		    height: 20px;
+		    background-color: #f0f0f0;
+		    border: 1px solid #ccc;
+		    border-radius: 50%;
+		    display: flex;
+		    justify-content: center;
+		    align-items: center;
+		    cursor: pointer;
+		}
+		
+		.quantity-input::before {
+		    left: -25px; /* 왼쪽 버튼 위치 */
+		}
+		
+		.quantity-input::after {
+		    right: -25px; /* 오른쪽 버튼 위치 */
+		}
+		
+		/* 증감 버튼에 해당하는 기호 */
+		.quantity-input::before::after {
+		    content: "+";
+		    font-size: 18px;
+		    color: #333;
+		}
+		
+		.quantity-input::after::after {
+		    content: "-";
+		    font-size: 18px;
+		    color: #333;
+		}
+		
+		/* 번호 입력 필드 테두리 스타일 */
+		.quantity-container input[type="number"] {
+		    padding-left: 25px; /* 왼쪽 버튼이 겹치지 않도록 여백 추가 */
+		    padding-right: 25px; /* 오른쪽 버튼이 겹치지 않도록 여백 추가 */
+		}
+				
 
+		 /* Button /////////////////////////////////////////////////////// */
         button {
             background-color: #007BFF;
             color: #fff;
@@ -164,27 +301,21 @@
     <h1>장바구니</h1>
 
     <table>
-        <thead>
-            <tr>
-                <th><input type="checkbox" onclick="toggleAllCheckboxes(this)" /></th>
-                <th>이미지</th>
-                <th>상품 ID</th>
-                <th>상품명</th>
-                <th>가격</th>
-                <th>수량</th>
-                <th>총 가격</th>
-                <th>삭제</th>
-            </tr>
-        </thead>
+        <div><input type="checkbox" onclick="toggleAllCheckboxes(this)" /></div>
         <tbody>
             <c:forEach var="item" items="${cartList}">
                 <tr>
                     <td><input type="checkbox" name="cartIds" value="${item.cartId}" class="item-checkbox" /></td>
                     <td><img src="${item.product.prodImageUrl}" alt="상품 이미지" class="product-image" /></td>
-                    <td>${item.product.prodId}</td>
+                    <td>No. ${item.product.prodId}</td>
                     <td>${item.product.prodModelName}</td>
                     <td class="product-price">${item.product.prodSalePrice}</td>
-                    <td><input type="number" name="quantities" value="${item.cartCount}" min="0" class="quantity-input" /></td>
+                    <td>
+					    <div class="quantity-container">
+					        <input type="number" name="quantities" value="${item.cartCount}" min="0" class="quantity-input" />
+					    </div>
+					</td>
+
                     <td class="total-price">${item.product.prodSalePrice * item.cartCount}원</td>
                     <td>
                         <form method="post" action="/Cart.do">
