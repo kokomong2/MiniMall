@@ -36,7 +36,7 @@ public class CartServlet extends HttpServlet
 			 List<CartDto> cartList = cartDao.listCartWithProductInfo(cust_email);
 		     request.setAttribute("cartList", cartList);
 		     
-		     RequestDispatcher disp=request.getRequestDispatcher("/WEB-INF/views/cartform.jsp");
+		     RequestDispatcher disp=request.getRequestDispatcher("/WEB-INF/views/cart/cartform.jsp");
 			 disp.forward(request, response);
 		 }
 	 }

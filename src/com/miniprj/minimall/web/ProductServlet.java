@@ -29,7 +29,7 @@ public class ProductServlet extends HttpServlet {
 			request.setAttribute("products", products);
 
 			// JSP로 요청 포워딩
-			request.getRequestDispatcher("/WEB-INF/views/productList.jsp").forward(request, response);
+			request.getRequestDispatcher("/WEB-INF/views/product/productList.jsp").forward(request, response);
 		}
 		if ("detailform".equals(action)) {
 			
@@ -40,7 +40,7 @@ public class ProductServlet extends HttpServlet {
 			request.setAttribute("product", product);
 
 			// 상품 상세 정보 JSP로 포워딩
-			request.getRequestDispatcher("/WEB-INF/views/productdetailform.jsp").forward(request, response);
+			request.getRequestDispatcher("/WEB-INF/views/product/productdetailform.jsp").forward(request, response);
 		}
 			
 		

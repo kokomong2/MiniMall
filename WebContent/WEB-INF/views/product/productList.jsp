@@ -59,6 +59,8 @@
     </style>
 </head>
 <body>
+    <jsp:include page="/WEB-INF/views/header.jsp" />
+
     <h1>Product List</h1>
     <table border="1">
         <tr>
@@ -106,5 +108,7 @@
             </tr>
         </c:forEach>
     </table>
+        <jsp:include page="/WEB-INF/views/footer.jsp" />
+    
 </body>
 </html>
