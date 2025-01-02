@@ -38,6 +38,8 @@
                     <!-- 장바구니 버튼 -->
                     <td>
                         <form method="post" action="/Cart.do">
+                        	<input type="hidden" name="custId" value="1"/>
+                        	<input type="hidden" name="cartQuantity" value="1" min="1"/>
 						    <input type="hidden" name="productId" value="${product.prodId}" />
 						    <input type="hidden" name="action" value="addCart" />
 						    <button type="submit">Add to Cart</button>

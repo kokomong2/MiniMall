@@ -55,15 +55,24 @@ public class CartServlet extends HttpServlet
 	     if ("addCart".equals(action)) 
 	     {
 	         // 장바구니에 상품을 추가
-	    	 int prod_id = Integer.parseInt(request.getParameter("productId"));
-		     int cust_id = Integer.parseInt(request.getParameter("custId"));
-		     int cart_quantity = Integer.parseInt(request.getParameter("cartQuantity"));
+	    	 String prod_id = request.getParameter("productId");
+		     String cust_id = request.getParameter("custId");
+		     String cart_quantity = request.getParameter("cartQuantity");
 		     
-		     // 장바구니에 추가
-		     CartDao cartDao = new CartDao();
-		     cartDao.addCart( prod_id, cart_quantity, cust_id);
-		     
-		     response.sendRedirect("/Cart.do?action=list");
+		     if(prod_id!=null && cust_id!=null && cart_quantity!=null)
+		     {
+		    	// 장바구니에 추가
+			     try {
+			    	 CartDao cartDao = new CartDao();
+				     cartDao.addCart( Integer.parseInt(prod_id), Integer.parseInt(cart_quantity), Integer.parseInt(cust_id));
+				     
+				     
+			     }catch (Exception e) {
+			    	 e.printStackTrace();
+			    	 System.out.println("addCart error="+e.getMessage());
+		     }
+			}
+		    response.sendRedirect("/Cart.do?action=list");
 	     } 
 	     else if ("updateCart".equals(action)) 
 	     {
