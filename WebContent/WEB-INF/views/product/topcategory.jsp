@@ -37,35 +37,35 @@
 
 
 <div class="category-container">
-    <div class="category-item" onclick="location.href='http://localhost:8080/product/Product.do?action=list'">
+    <div class="category-item" onclick="location.href='/product/Product.do?action=list'">
         <img src="https://via.placeholder.com/50" alt="전체">
         <span>전체</span>
     </div>
-    <div class="category-item" onclick="location.href='/category?type=fruits'">
+    <div class="category-item" onclick="location.href='/product/Product.do?action=category&prod_category=곡물'">
         <img src="https://via.placeholder.com/50" alt="곡물">
         <span>곡물</span>
     </div>
-    <div class="category-item" onclick="location.href='/category?type=vegetables'">
+    <div class="category-item" onclick="location.href='/product/Product.do?action=category&prod_category=과일'">
         <img src="https://via.placeholder.com/50" alt="과일">
         <span>과일</span>
     </div>
-    <div class="category-item" onclick="location.href='/category?type=meat'">
+    <div class="category-item" onclick="location.href='/product/Product.do?action=category&prod_category=버섯'">
         <img src="https://via.placeholder.com/50" alt="버섯">
         <span>버섯</span>
     </div>
-    <div class="category-item" onclick="location.href='/category?type=snacks'">
+    <div class="category-item" onclick="location.href='/product/Product.do?action=category&prod_category=약재'">
         <img src="https://via.placeholder.com/50" alt="약재">
         <span>약재</span>
     </div>
-    <div class="category-item" onclick="location.href='/category?type=milk'">
+    <div class="category-item" onclick="location.href='/product/Product.do?action=category&prod_category=조미료'">
         <img src="https://via.placeholder.com/50" alt="조미료">
         <span>조미료</span>
     </div>
-        <div class="category-item" onclick="location.href='/category?type=milk'">
+        <div class="category-item" onclick="location.href='/product/Product.do?action=category&prod_category=채소'">
         <img src="https://via.placeholder.com/50" alt="채소">
         <span>채소</span>
     </div>
-    <div class="category-item" onclick="location.href='/category?type=milk'">
+    <div class="category-item" onclick="location.href='/product/Product.do?action=category&prod_category=기타'">
         <img src="https://via.placeholder.com/50" alt="기타">
         <span>기타</span>
     </div>

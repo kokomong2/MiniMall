@@ -38,10 +38,10 @@
     <!-- 메인 콘텐츠 -->
     <main>
         <h1>Top Category</h1>
-        <jsp:include page="/WEB-INF/views/topcategory.jsp" />
+        <jsp:include page="/WEB-INF/views/product/topcategory.jsp" />
 
         <h1>Daily Best Sell</h1>
-        <jsp:include page="/WEB-INF/views/dailybestsell.jsp" />
+        <jsp:include page="/WEB-INF/views/product/dailybestsell.jsp" />
     </main>
 
     <!-- 푸터 포함 -->
