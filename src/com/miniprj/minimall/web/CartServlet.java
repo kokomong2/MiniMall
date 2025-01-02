@@ -31,9 +31,11 @@ public class CartServlet extends HttpServlet
 		 CartDao cartDao = new CartDao();
 		 String action = request.getParameter("action");
 		 
+		 
 		 if("list".equals(action))
 		 {
-			 int cust_id=1;//임시로 회원 정함
+			 System.out.println("this one is working");
+			 int cust_id=2;//임시로 회원 정함
 			 List<CartDto> cartList = cartDao.listCartWithProductInfo(cust_id);
 		     request.setAttribute("cartList", cartList);
 		     
@@ -91,13 +93,14 @@ public class CartServlet extends HttpServlet
 	     {
 	         // 장바구니에서 상품을 제거
 	    	 int cart_id = Integer.parseInt(request.getParameter("cartId"));
-	 	     int cust_id=Integer.parseInt("1");//수정!!!
+	 	     int cust_id=Integer.parseInt("2");//수정!!!
 	 	     
 	 	     try {
 	 	    	 CartDao cartDao = new CartDao();
 	 	         cartDao.removeCart(cart_id, cust_id);
 			} catch (Exception e) {
-				// TODO: handle exception
+				 e.printStackTrace();
+		    	 System.out.println("removeCart error="+e.getMessage());
 			}
 	 	     
 	 	     response.sendRedirect("/Cart.do?action=list");

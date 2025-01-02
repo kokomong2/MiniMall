@@ -25,40 +25,6 @@ public class CartDao {
         }
     }
 
-    // 장바구니 목록만 조회
-    /*
-    public List<CartDto> listCart(int custId) {
-    	
-        List<CartDto> cartList = new ArrayList<>();
-        Connection con = null;
-        PreparedStatement pstmt = null;
-        ResultSet rs = null;
-
-        try {
-            con = ds.getConnection();
-            String sql = "SELECT cart_id, cart_count, cust_id, prod_id FROM cart WHERE cust_id = ?";
-            pstmt = con.prepareStatement(sql);
-            pstmt.setInt(1, custId);
-            rs = pstmt.executeQuery();
-
-            while (rs.next()) {
-                CartDto cart = new CartDto(
-	        		rs.getLong("cart_id"),
-	    		    rs.getLong("cart_count"),
-	    		    rs.getLong("cust_id"),
-	    		    rs.getLong("prod_id")
-                );
-                cartList.add(cart);
-            }
-        } catch (Exception e) {
-            throw new RuntimeException("CartDao listCart error=" + e.getMessage());
-        } finally {
-            closeResources(rs,pstmt,con);
-        }
-
-        return cartList;
-    }
-    */
 
     public void addCart(int productId, int quantity, int customerId) {
         Connection con = null;
@@ -165,6 +131,7 @@ public class CartDao {
     
     
     //장바구니+상품정보 조회
+ // 장바구니+상품정보 조회
     public List<CartDto> listCartWithProductInfo(int custId) {
         List<CartDto> cartList = new ArrayList<>();
         Connection con = null;
@@ -173,7 +140,16 @@ public class CartDao {
 
         try {
             con = ds.getConnection();
-            String sql = "SELECT cart_id, cart_count, cust_id, prod_id FROM cart WHERE cust_id = ?";
+            String sql = "SELECT c.cart_id, c.cart_count, c.cust_id, c.prod_id, "
+                    + "p.prod_inspection_date, p.prod_subcategory, p.prod_main_category, "
+                    + "p.prod_region_name, p.prod_image_url, p.prod_model_name, "
+                    + "p.prod_sales_office_name, p.prod_brand_name, p.prod_goods_name, "
+                    + "p.prod_sale_price, p.prod_pack_capacity, p.prod_pack_unit, "
+                    + "p.prod_sale_weight, p.prod_weight_unit, p.prod_explanation "
+                    + "FROM cart c "
+                    + "JOIN product p ON c.prod_id = p.prod_id "
+                    + "WHERE c.cust_id = ?";
+
             pstmt = con.prepareStatement(sql);
             pstmt.setInt(1, custId);
             rs = pstmt.executeQuery();
@@ -185,24 +161,41 @@ public class CartDao {
                 cart.setCustId(rs.getLong("cust_id"));
                 cart.setProdId(rs.getLong("prod_id"));
 
-                // 해당 prodId에 해당하는 상품 정보 가져오기
-                ProductDto product = getProductById(rs.getLong("prod_id"));
-                cart.setProduct(product);
+                // 상품 정보를 ProductDto에 직접 설정
+                ProductDto product = new ProductDto();
+                product.setProdId(rs.getInt("prod_id"));
+                product.setProdInspectionDate(rs.getString("prod_inspection_date"));
+                product.setProdSubcategory(rs.getString("prod_subcategory"));
+                product.setProdMainCategory(rs.getString("prod_main_category"));
+                product.setProdRegionName(rs.getString("prod_region_name"));
+                product.setProdImageUrl(rs.getString("prod_image_url"));
+                product.setProdModelName(rs.getString("prod_model_name"));
+                product.setProdSalesOfficeName(rs.getString("prod_sales_office_name"));
+                product.setProdBrandName(rs.getString("prod_brand_name"));
+                product.setProdGoodsName(rs.getString("prod_goods_name"));
+                product.setProdSalePrice(rs.getInt("prod_sale_price"));
+                product.setProdPackCapacity(rs.getInt("prod_pack_capacity"));
+                product.setProdPackUnit(rs.getString("prod_pack_unit"));
+                product.setProdSaleWeight(rs.getDouble("prod_sale_weight"));
+                product.setProdWeightUnit(rs.getString("prod_weight_unit"));
+                product.setProdExplanation(rs.getString("prod_explanation"));
 
+                cart.setProduct(product);
                 cartList.add(cart);
             }
         } catch (Exception e) {
             throw new RuntimeException("CartDao listCartWithProductInfo error=" + e.getMessage());
         } finally {
-        	closeResources(rs,pstmt,con);
+            closeResources(rs, pstmt, con);
         }
         return cartList;
     }
 
+
     // 상품 정보를 조회
     private ProductDto getProductById(long prodId) {
-        ProductDAO productDao = new ProductDAO();
-        return productDao.getProductById(prodId);
+        ProductDao productDao = new ProductDao();
+        return productDao.getProductDetail((int)prodId);
     }
 
 

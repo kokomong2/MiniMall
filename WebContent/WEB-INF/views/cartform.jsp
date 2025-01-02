@@ -74,20 +74,19 @@
 	    
 	 	//CART UPDATE/////////////////////////////////////////////////////////////////
         function updateCartQuantity(cartId, quantity) {
+		    fetch('/Cart.do', {
+		        method: 'POST',
+		        body: new URLSearchParams({
+		            action: 'updateCart',
+		            cartId: cartId,
+		            quantity: quantity
+		        })
+		    })
+		    .then(function(data) {
+		        changeEachPrice();
+		    });
+		}
 
-            fetch('/Cart.do', {
-                method: 'POST',
-                body: new URLSearchParams({
-                    action: 'updateCart',
-                    cartId: cartId,
-                    quantity: quantity
-                })
-            })
-            .then(data => {
-            	changeEachPrice();
-            });
-
-        }
 	 	
         
 	    
@@ -142,16 +141,16 @@
                       
                       <td>${item.product.prodId}</td>
                       
-                      <td>${item.product.prodName}</td>
+                      <td>${item.product.prodModelName}</td>
                       
-                      <td class="product-price">${item.product.prodPrice}</td>
+                      <td class="product-price">${item.product.prodSalePrice}</td>
                       
                       <td>
                       	<input type="number" name="quantities" value="${item.cartCount}" min="0" class="quantity-input" />
                       </td>
                       
                       <td class="total-price">
-                      	${item.product.prodPrice * item.cartCount}원
+                      	${item.product.prodSalePrice * item.cartCount}원
                       </td>
 
                       <td>
