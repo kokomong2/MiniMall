@@ -12,42 +12,38 @@ import com.miniprj.minimall.model.ProductDto;
 
 @WebServlet("/product/Product.do")
 public class ProductServlet extends HttpServlet {
-	private static final long serialVersionUID = 1L;
+    private static final long serialVersionUID = 1L;
 
-	ProductDao dao = new ProductDao();
+    ProductDao dao = new ProductDao();
 
-	protected void doGet(HttpServletRequest request, HttpServletResponse response)
-			throws ServletException, IOException {
+    protected void doGet(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
+        String action = request.getParameter("action");
 
-		String action = request.getParameter("action");
+        if ("list".equals(action)) {
+            List<ProductDto> products = dao.getAllProducts();
+            request.setAttribute("products", products);
+            request.getRequestDispatcher("/WEB-INF/views/productlist.jsp").forward(request, response);
+        } else if ("detailform".equals(action)) {
+            int prodId = Integer.parseInt(request.getParameter("prod_id"));
+            ProductDto product = dao.getProductDetail(prodId);
+            request.setAttribute("product", product);
+            request.getRequestDispatcher("/WEB-INF/views/productdetailform.jsp").forward(request, response);
+        } else if ("category".equals(action)) {
+            String prodCategory = request.getParameter("prod_category");
+            List<ProductDto> products = dao.listByCategory(prodCategory);
+            request.setAttribute("products", products);
+            request.getRequestDispatcher("/WEB-INF/views/productlist.jsp").forward(request, response);
+        } else if ("search".equals(action)) {
+            String searchQuery = request.getParameter("search_query");
+            List<ProductDto> products = dao.searchProducts(searchQuery);
+            request.setAttribute("products", products);
+            request.getRequestDispatcher("/WEB-INF/views/productlist.jsp").forward(request, response);
+        }
+    }
 
-		if ("list".equals(action)) {
-			// 데이터 가져오기
-			List<ProductDto> products = dao.getAllProducts();
-
-			// 데이터를 요청 객체에 저장
-			request.setAttribute("products", products);
-
-			// JSP로 요청 포워딩
-			request.getRequestDispatcher("/WEB-INF/views/productList.jsp").forward(request, response);
-		}
-		if ("detailform".equals(action)) {
-			
-			int prod_id = Integer.parseInt(request.getParameter("prod_id"));
-			
-			ProductDto product = dao.getProductDetail(prod_id);
-			
-			request.setAttribute("product", product);
-
-			// 상품 상세 정보 JSP로 포워딩
-			request.getRequestDispatcher("/WEB-INF/views/productdetailform.jsp").forward(request, response);
-		}
-			
-		
-	}
-
-	protected void doPost(HttpServletRequest request, HttpServletResponse response)
-			throws ServletException, IOException {
-		doGet(request, response);
-	}
+    protected void doPost(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
+        doGet(request, response);
+    }
 }
