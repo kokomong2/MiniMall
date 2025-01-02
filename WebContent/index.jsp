@@ -1,32 +1,50 @@
-<%@ page language="java" contentType="text/html; charset=UTF-8"
-    pageEncoding="UTF-8"%>
-<%@ page import="com.miniprj.minimall.model.CustomerDto" %>
+<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
-<html>
+<html lang="ko">
 <head>
-<meta charset="UTF-8">
-<title>Insert title here</title>
+    <meta charset="UTF-8">
+    <title>농산물 마켓</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Arial', sans-serif;
+            line-height: 1.6;
+            background-color: #f9f9f9;
+        }
+
+        main {
+            padding: 2rem;
+        }
+
+        h1 {
+            text-align: center;
+            margin-bottom: 1rem;
+        }
+
+        .category-container, .products-container {
+            margin-bottom: 2rem;
+        }
+    </style>
 </head>
 <body>
-<h1> 홈  </h1>
+    <!-- 헤더 포함 -->
+    <jsp:include page="/WEB-INF/views/header.jsp" />
 
-<%
-    // 세션에서 사용자 정보를 가져옴
-    CustomerDto customer = (CustomerDto) session.getAttribute("customer");
-    if (customer != null) {
-%>
-    <p>안녕하세요, <%= customer.getCust_name() %> 님!</p>
-    <a href="/auth/Auth.do?action=logout">로그아웃</a>
-    <a href="/customer/Customer.do?action=mypageEditForm">마이페이지</a>
-<%
-    } else {
-%>
-    <p>로그인이 필요합니다.</p>
-    <a href="/auth/Auth.do?action=loginform">로그인</a>
-    <a href="/auth/Auth.do?action=signupform">회원가입</a>
-<%
-    }
-%>
+    <!-- 메인 콘텐츠 -->
+    <main>
+        <h1>Top Category</h1>
+        <jsp:include page="/WEB-INF/views/topcategory.jsp" />
 
+        <h1>Daily Best Sell</h1>
+        <jsp:include page="/WEB-INF/views/dailybestsell.jsp" />
+    </main>
+
+    <!-- 푸터 포함 -->
+    <jsp:include page="/WEB-INF/views/footer.jsp" />
 </body>
 </html>

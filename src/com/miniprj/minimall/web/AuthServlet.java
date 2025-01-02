@@ -85,7 +85,7 @@ public class AuthServlet extends HttpServlet {
 			System.out.println("cust_name: " + cust_name); // 인코딩 확인용
 			System.out.println("cust_address: " + cust_address); // 인코딩 확인용
 
-			customerDao.sinup(customer);
+			customerDao.signup(customer);
 			response.sendRedirect("/auth/Auth.do?action=loginform");
 		}catch(Exception e) {
             request.setAttribute("errorMessage", "회원가입 중 오류가 발생했습니다: " + e.getMessage());

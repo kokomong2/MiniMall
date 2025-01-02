@@ -28,7 +28,7 @@ public class CustomerDao {
         return con;
     }
 
-    public void sinup(CustomerDto customer) {
+    public void signup(CustomerDto customer) {
         Connection con = null;
         PreparedStatement pstmt = null;
         try {
@@ -45,7 +45,7 @@ public class CustomerDao {
             System.out.println("Executing SQL: " + sql);
             int rowCount = pstmt.executeUpdate();
             if (rowCount != 1) {
-                throw new SQLException("No rows affected");
+                throw new SQLException("저장된 행이 없습니다.");
             }
         } catch (Exception e) {
             throw new RuntimeException("CustomerDao.insert() : SQL Error - " + e.getMessage(), e);
@@ -113,7 +113,39 @@ public class CustomerDao {
             if (pstmt != null) try { pstmt.close(); } catch (Exception e) {}
             if (con != null) try { con.close(); } catch (Exception e) {}
         }
-		
+	}
+	
+	public CustomerDto findByEmail(String cust_email) {
+	    Connection con = null;
+	    PreparedStatement pstmt = null;
+	    ResultSet rs = null;
+
+	    try {
+	        con = getConnection();
+	        String sql = "SELECT * FROM customer WHERE cust_email = ?";
+	        pstmt = con.prepareStatement(sql);
+	        pstmt.setString(1, cust_email);
+	        rs = pstmt.executeQuery();
+
+	        if (rs.next()) {
+	            return new CustomerDto(
+	                rs.getString("cust_name"),
+	                rs.getString("cust_email"),
+	                rs.getString("cust_phone_num"),
+	                rs.getString("cust_postcode"),
+	                rs.getString("cust_address"),
+	                rs.getString("cust_detail_address")
+	            );
+	        }
+	    } catch (Exception e) {
+	        throw new RuntimeException("CustomerDao.findByEmail() : SQL Error - " + e.getMessage(), e);
+	    } finally {
+	        if (rs != null) try { rs.close(); } catch (Exception e) {}
+	        if (pstmt != null) try { pstmt.close(); } catch (Exception e) {}
+	        if (con != null) try { con.close(); } catch (Exception e) {}
+	    }
+
+	    return null; // 사용자를 찾을 수 없는 경우 null 반환
 	}
 
 	

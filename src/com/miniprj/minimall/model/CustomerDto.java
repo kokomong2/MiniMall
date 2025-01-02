@@ -21,6 +21,16 @@ public class CustomerDto {
 	    this.cust_address = cust_address;
 	    this.cust_detail_address = cust_detail_address;
 	}
+	
+	public CustomerDto(String cust_name, String cust_email, String cust_phone_num, 
+            String cust_postcode, String cust_address, String cust_detail_address) {
+	this.cust_name = cust_name;
+	this.cust_email = cust_email;
+	this.cust_phone_num = cust_phone_num;
+	this.cust_postcode = cust_postcode;
+	this.cust_address = cust_address;
+	this.cust_detail_address = cust_detail_address;
+	}
 } 
 
 
