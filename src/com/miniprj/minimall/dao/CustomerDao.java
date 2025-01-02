@@ -1,5 +1,7 @@
 package com.miniprj.minimall.dao;
 
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -55,40 +57,77 @@ public class CustomerDao {
         }
     }
     
-    public CustomerDto findbyEmailAndPassword(String cust_emil, String cust_password) {
+    public CustomerDto login(String cust_email, String cust_password) throws SQLException {
         Connection con = null;
         PreparedStatement pstmt = null;
         ResultSet rs = null;
 
-        try {
-            con = getConnection();
-            String sql = "SELECT * FROM customer WHERE cust_email = ? AND cust_password = ?";
-            pstmt = con.prepareStatement(sql);
-            pstmt.setString(1, cust_emil);
-            pstmt.setString(2, cust_password);
-            rs = pstmt.executeQuery();
-
-            if (rs.next()) {
-                return new CustomerDto(
-                    rs.getString("cust_name"),
-                    rs.getString("cust_email"),
-                    rs.getString("cust_password"),
-                    rs.getString("cust_phone_num"),
-                    rs.getString("cust_postcode"),
-                    rs.getString("cust_address"),
-                    rs.getString("cust_detail_address")
-                );
-            }
-        } catch (Exception e) {
-            throw new RuntimeException("CustomerDao.findbyEmailAndPassword() : SQL Error - " + e.getMessage(), e);
-        } finally {
-            if (rs != null) try { rs.close(); } catch (Exception e) {}
-            if (pstmt != null) try { pstmt.close(); } catch (Exception e) {}
-            if (con != null) try { con.close(); } catch (Exception e) {}
-        }
-
-        return null; // 사용자 없음
+		try {
+			con = getConnection();
+			String sql = "SELECT * FROM customer WHERE cust_email = ?";
+			pstmt = con.prepareStatement(sql);
+			pstmt.setString(1, cust_email);
+			rs = pstmt.executeQuery();
+			if(rs.next()) {
+				String storedPassword = rs.getString("cust_password");
+				String encryptedInputPassword = encryptPassword(cust_password);
+				
+				if (storedPassword.equals(encryptedInputPassword)) {
+					return new CustomerDto(
+		                    rs.getString("cust_name"),
+		                    rs.getString("cust_email"),
+		                    rs.getString("cust_password"),
+		                    rs.getString("cust_phone_num"),
+		                    rs.getString("cust_postcode"),
+		                    rs.getString("cust_address"),
+		                    rs.getString("cust_detail_address")
+		                );
+	            	}
+				}else {
+					return null;
+				}
+		} catch(SQLException e) {
+			System.out.println(e.getMessage());
+			throw new RuntimeException(e);
+		} finally {
+			 con.close();
+		}
+		return null;
     }
+    
+    // 비밀번호 복호화
+	private String encryptPassword(String password) {
+        try {
+            MessageDigest digest = MessageDigest.getInstance("SHA-256");
+            byte[] hash = digest.digest(password.getBytes());
+            StringBuilder hexString = new StringBuilder();
+            for (byte b : hash) {
+                hexString.append(String.format("%02x", b));
+            }
+            return hexString.toString();
+        } catch (NoSuchAlgorithmException e) {
+            throw new RuntimeException("SHA-256 알고리즘이 지원되지 않습니다.", e);
+        }
+    }
+	
+	// 이메일 중복 확인
+	public boolean checkEmail(String cust_email) throws SQLException {
+		Connection con = null;
+		
+		try {
+			con = getConnection();
+			String sql = "SELECT * FROM customer WHERE cust_email = ?";
+			PreparedStatement stmt = con.prepareStatement(sql);
+			stmt.setString(1, cust_email);
+			ResultSet rs = stmt.executeQuery();
+			return rs.next();
+		} catch(SQLException e) {
+			System.out.println(e.getMessage());
+			throw new RuntimeException(e);
+		} finally {
+			con.close();
+		}
+	}
 
 	public void editCustomerInfo(CustomerDto customer) {
         Connection con = null;
@@ -147,7 +186,6 @@ public class CustomerDao {
 
 	    return null; // 사용자를 찾을 수 없는 경우 null 반환
 	}
-
 	
 	
 }

@@ -99,6 +99,12 @@
         .login-container .links a:hover {
             text-decoration: underline;
         }
+        
+        .error-message {
+            color: red;
+            font-size: 14px;
+            margin-bottom: 10px;
+        }
     </style>
 </head>
 <body>
@@ -110,6 +116,10 @@
 	<main>
 	    <div class="login-container">
 	        <h1>로그인</h1>
+	        <% String message = (String) request.getAttribute("message");
+            	if (message != null) { %>
+           		<p class="error-message"><%= message %></p>
+        	<% } %>
 	        <form action="/auth/Auth.do?action=login" method="post">
 	            <label for="cust_email">이메일</label>
 	            <input type="email" name="cust_email" id="cust_email" placeholder="이메일" required>
@@ -123,7 +133,7 @@
 	        <button class="signup-button" onclick="location.href='/auth/Auth.do?action=signupform'">회원가입</button>
 	
 	        <div class="links">
-	            <a href="#">비밀번호 찾기</a> | <a href="#">비회원 주문 조회</a>
+	            <a href="#">비밀번호 찾기</a>
 	        </div>
 	    </div>
     </main>

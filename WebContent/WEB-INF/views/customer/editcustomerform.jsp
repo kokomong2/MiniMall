@@ -19,6 +19,43 @@
             document.getElementById('editBtn').style.display = 'none';
             document.getElementById('backBtn').style.display = 'inline';
             document.getElementById('postcodeBtn').style.display = 'inline';
+
+            const phoneField = document.querySelector('input[name="cust_phone_num"]');
+            phoneField.addEventListener('blur', validatePhoneNumber);
+        }
+
+        function validatePhoneNumber() {
+            const phoneField = document.querySelector('input[name="cust_phone_num"]');
+            const phoneMessage = document.createElement('span');
+            const phoneRegex = /^01([0|1|6|7|8|9])-\d{3,4}-\d{4}$/;
+
+            // 기존 메시지 제거
+            if (phoneField.nextSibling) {
+                phoneField.nextSibling.remove();
+            }
+
+            // 유효성 검사
+            if (!phoneRegex.test(phoneField.value)) {
+                phoneMessage.textContent = "유효하지 않은 연락처 형식입니다.";
+                phoneMessage.style.color = "red";
+                phoneField.insertAdjacentElement('afterend', phoneMessage);
+                return false; // 유효하지 않음
+            } else {
+                phoneMessage.textContent = "올바른 연락처 형식입니다.";
+                phoneMessage.style.color = "green";
+                phoneField.insertAdjacentElement('afterend', phoneMessage);
+                return true; // 유효함
+            }
+        }
+
+        function validateForm(event) {
+            // 전화번호 유효성 검사
+            const isPhoneValid = validatePhoneNumber();
+
+            if (!isPhoneValid) {
+                event.preventDefault(); // 폼 제출 방지
+                alert("전화번호 형식을 올바르게 입력하세요.");
+            }
         }
 
         function cancelEditing() {
@@ -149,7 +186,7 @@
     <jsp:include page="/WEB-INF/views/header.jsp" />
 
     <main>
-        <form action="/customer/Customer.do?action=mypageEdit" method="post">
+        <form action="/customer/Customer.do?action=mypageEdit" method="post" onsubmit="validateForm(event)">
             <%
                 // 세션에서 사용자 정보를 가져옴
                 CustomerDto customer = (CustomerDto) session.getAttribute("customer");
@@ -165,12 +202,12 @@
                     <td class="label">이메일</td>
                     <td><%= customer.getCust_email() %></td>
                 </tr>
-                <tr>
-                    <td class="label">연락처</td>
-                    <td class="field">
-                        <input type="text" id="cust_phone_num" name="cust_phone_num" value="<%= customer.getCust_phone_num() %>" disabled>
-                    </td>
-                </tr>
+				<tr>
+				    <td class="label">연락처</td>
+				    <td class="field">
+				        <input type="text" id="cust_phone_num" name="cust_phone_num" value="<%= customer.getCust_phone_num() %>" disabled>
+				    </td>
+				</tr>
                 <tr>
                     <td class="label">우편번호</td>
                     <td class="field">

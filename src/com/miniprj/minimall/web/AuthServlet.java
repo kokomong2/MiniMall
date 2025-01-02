@@ -1,6 +1,10 @@
 package com.miniprj.minimall.web;
 
 import java.io.IOException;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
+import java.sql.SQLException;
+
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletConfig;
 import javax.servlet.ServletException;
@@ -32,12 +36,27 @@ public class AuthServlet extends HttpServlet {
             showLoginForm(request, response);
         } else if ("logout".equals(action)) {
         	logout(request,response);
-        }
+        }else if("checkemail".equals(action)) {
+			String cust_email = request.getParameter("cust_email");
+			
+			boolean isEmailUsed = false;
+			try {
+				isEmailUsed = customerDao.checkEmail(cust_email);
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
+            response.setContentType("application/json");
+            response.getWriter().write("{\"emailUsed\": " + isEmailUsed + "}");
+            return;
+		}
+
         else {
             response.sendError(HttpServletResponse.SC_NOT_FOUND, "Invalid action");
         }
 	}
 	
+
+
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) 
 			throws ServletException, IOException {
 		String action = request.getParameter("action");
@@ -76,15 +95,13 @@ public class AuthServlet extends HttpServlet {
 		String cust_postcode = request.getParameter("cust_postcode");
 		String cust_address = request.getParameter("cust_address");
 		String cust_detail_address = request.getParameter("cust_detail_address");
+		String encryptedPassword = encryptPassword(cust_password);
 		
-		CustomerDto customer = new CustomerDto(cust_name, cust_email, cust_password, cust_phone_num, cust_postcode, cust_address, cust_detail_address);
+		CustomerDto customer = new CustomerDto(cust_name, cust_email, encryptedPassword, cust_phone_num, cust_postcode, cust_address, cust_detail_address);
 		
 		response.setContentType("text/html; charset=utf-8");
 		
 		try {
-			System.out.println("cust_name: " + cust_name); // 인코딩 확인용
-			System.out.println("cust_address: " + cust_address); // 인코딩 확인용
-
 			customerDao.signup(customer);
 			response.sendRedirect("/auth/Auth.do?action=loginform");
 		}catch(Exception e) {
@@ -94,6 +111,23 @@ public class AuthServlet extends HttpServlet {
 		}
 	}
 	
+	// 비밀번호 암호화
+	private String encryptPassword(String password) {
+        try {
+            MessageDigest digest = MessageDigest.getInstance("SHA-256");
+            byte[] hash = digest.digest(password.getBytes());
+            StringBuilder hexString = new StringBuilder();
+            
+            for (byte b : hash) {
+                hexString.append(String.format("%02x", b));
+            }
+            
+            return hexString.toString();
+        } catch (NoSuchAlgorithmException e) {
+            throw new RuntimeException("SHA-256 알고리즘이 지원되지 않습니다.", e);
+        }
+    }
+	
 	// 로그인 하기
 	private void login(HttpServletRequest request, HttpServletResponse response) 
 			throws ServletException, IOException {
@@ -102,12 +136,12 @@ public class AuthServlet extends HttpServlet {
 		String cust_password = request.getParameter("cust_password");
 		
 		try {
-			CustomerDto customer = customerDao.findbyEmailAndPassword(cust_email, cust_password);
+			CustomerDto customer = customerDao.login(cust_email, cust_password);
 			if(customer != null) {
 				request.getSession().setAttribute("customer", customer);
 				response.sendRedirect("/index.jsp");
 			} else {
-				request.setAttribute("errorMessage",  "로그인 정보가 올바르지 않습니다.");
+				request.setAttribute("message",  "로그인 정보가 올바르지 않습니다.");
 				RequestDispatcher dispatcher = request.getRequestDispatcher("/WEB-INF/views/auth/loginform.jsp");
 				dispatcher.forward(request, response);
 			}
