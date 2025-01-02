@@ -18,6 +18,33 @@
             margin-bottom: 20px;
         }
 
+        form {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        form input[type="text"] {
+            padding: 10px;
+            font-size: 14px;
+            width: 300px;
+            margin-right: 10px;
+        }
+
+        form select {
+            padding: 10px;
+            font-size: 14px;
+            margin-right: 10px;
+        }
+
+        form button {
+            padding: 10px 20px;
+            font-size: 14px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            cursor: pointer;
+        }
+
         table {
             width: 100%;
             border-collapse: collapse;
@@ -60,6 +87,30 @@
 </head>
 <body>
     <h1>Product List</h1>
+
+    <!-- 검색 및 카테고리 선택 폼 -->
+    <form action="/product/Product.do" method="get">
+        <input type="hidden" name="action" value="search">
+        <input type="text" name="search_query" placeholder="상품명 또는 설명 검색">
+        <button type="submit">검색</button>
+    </form>
+
+    <form action="/product/Product.do" method="get">
+        <input type="hidden" name="action" value="category">
+        <select name="prod_category">
+            <option value="">카테고리를 선택하세요</option>
+            <option value="채소">채소</option>
+            <option value="과일">과일</option>
+            <option value="약재">약재</option>
+            <option value="조미료">조미료</option>
+            <option value="곡물">곡물</option>
+            <option value="버섯">버섯</option>
+            <option value="기타">기타</option>
+      
+        </select>
+        <button type="submit">조회</button>
+    </form>
+
     <table border="1">
         <tr>
             <th>Product ID</th>

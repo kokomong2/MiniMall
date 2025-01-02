@@ -3,136 +3,159 @@ package com.miniprj.minimall.dao;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
-import java.sql.SQLDataException;
 import java.util.ArrayList;
 import java.util.List;
-
 import javax.naming.Context;
 import javax.naming.InitialContext;
 import javax.naming.NamingException;
 import javax.sql.DataSource;
-
 import com.miniprj.minimall.model.ProductDto;
 
 public class ProductDao {
-	static DataSource dataSource;
+    static DataSource dataSource;
 
-	static {
-		try {
-			Context context = new InitialContext();
-			dataSource = (DataSource)context.lookup("java:comp/env/jdbc/Oracle");
-		}catch(NamingException e) {
-			e.printStackTrace();
-		}
-	}
-	
-	public List<ProductDto> getAllProducts(){
-		Connection con = null;
-		List<ProductDto> products = new ArrayList<>();
-		try {
-			con = dataSource.getConnection();
-			String sql = "SELECT \r\n" + 
-					"    prod_id AS prodId,\r\n" + 
-					"    prod_inspection_date AS prodInspectionDate,\r\n" + 
-					"    prod_subcategory AS prodSubcategory,\r\n" + 
-					"    prod_main_category AS prodMainCategory,\r\n" + 
-					"    prod_region_name AS prodRegionName,\r\n" + 
-					"    prod_image_url AS prodImageUrl,\r\n" + 
-					"    prod_model_name AS prodModelName,\r\n" + 
-					"    prod_sales_office_name AS prodSalesOfficeName,\r\n" + 
-					"    prod_brand_name AS prodBrandName,\r\n" + 
-					"    prod_goods_name AS prodGoodsName,\r\n" + 
-					"    prod_sale_price AS prodSalePrice,\r\n" + 
-					"    prod_pack_capacity AS prodPackCapacity,\r\n" + 
-					"    prod_pack_unit AS prodPackUnit,\r\n" + 
-					"    prod_sale_weight AS prodSaleWeight,\r\n" + 
-					"    prod_weight_unit AS prodWeightUnit,\r\n" + 
-					"    prod_explanation AS prodExplanation\r\n" + 
-					"FROM product";
-			PreparedStatement stmt = con.prepareStatement(sql);
-			ResultSet rs = stmt.executeQuery();
-			while (rs.next()) {
-				ProductDto product = new ProductDto();
-				
-				product.setProdId(rs.getInt("prodId"));
-			    product.setProdInspectionDate(rs.getString("prodInspectionDate"));
-			    product.setProdSubcategory(rs.getString("prodSubcategory"));
-			    product.setProdMainCategory(rs.getString("prodMainCategory"));
-			    product.setProdRegionName(rs.getString("prodRegionName"));
-			    product.setProdImageUrl(rs.getString("prodImageUrl"));
-			    product.setProdModelName(rs.getString("prodModelName"));
-			    product.setProdSalesOfficeName(rs.getString("prodSalesOfficeName"));
-			    product.setProdBrandName(rs.getString("prodBrandName"));
-			    product.setProdGoodsName(rs.getString("prodGoodsName"));
-			    product.setProdSalePrice(rs.getInt("prodSalePrice"));
-			    product.setProdPackCapacity(rs.getInt("prodPackCapacity"));
-			    product.setProdPackUnit(rs.getString("prodPackUnit"));
-			    product.setProdSaleWeight(rs.getDouble("prodSaleWeight"));
-			    product.setProdWeightUnit(rs.getString("prodWeightUnit"));
-			    product.setProdExplanation(rs.getString("prodExplanation"));
-			    
-			    products.add(product);
-			}
-		} catch (Exception e) {
-			// TODO: handle exception
-		}
-		
-		return products;
-	}
-	public ProductDto getProductDetail(int prod_id) {
-		Connection con = null;
-		ProductDto product = new ProductDto();
-		try {
-			con = dataSource.getConnection();
-			String sql = "SELECT \r\n" + 
-					"    prod_id AS prodId,\r\n" + 
-					"    prod_inspection_date AS prodInspectionDate,\r\n" + 
-					"    prod_subcategory AS prodSubcategory,\r\n" + 
-					"    prod_main_category AS prodMainCategory,\r\n" + 
-					"    prod_region_name AS prodRegionName,\r\n" + 
-					"    prod_image_url AS prodImageUrl,\r\n" + 
-					"    prod_model_name AS prodModelName,\r\n" + 
-					"    prod_sales_office_name AS prodSalesOfficeName,\r\n" + 
-					"    prod_brand_name AS prodBrandName,\r\n" + 
-					"    prod_goods_name AS prodGoodsName,\r\n" + 
-					"    prod_sale_price AS prodSalePrice,\r\n" + 
-					"    prod_pack_capacity AS prodPackCapacity,\r\n" + 
-					"    prod_pack_unit AS prodPackUnit,\r\n" + 
-					"    prod_sale_weight AS prodSaleWeight,\r\n" + 
-					"    prod_weight_unit AS prodWeightUnit,\r\n" + 
-					"    prod_explanation AS prodExplanation\r\n" + 
-					"FROM product\r\n" +
-					"WHERE prod_id=?";
-			PreparedStatement stmt = con.prepareStatement(sql);
-			stmt.setInt(1, prod_id);
-			ResultSet rs = stmt.executeQuery();
-			if (rs.next()) {				
-				product.setProdId(rs.getInt("prodId"));
-			    product.setProdInspectionDate(rs.getString("prodInspectionDate"));
-			    product.setProdSubcategory(rs.getString("prodSubcategory"));
-			    product.setProdMainCategory(rs.getString("prodMainCategory"));
-			    product.setProdRegionName(rs.getString("prodRegionName"));
-			    product.setProdImageUrl(rs.getString("prodImageUrl"));
-			    product.setProdModelName(rs.getString("prodModelName"));
-			    product.setProdSalesOfficeName(rs.getString("prodSalesOfficeName"));
-			    product.setProdBrandName(rs.getString("prodBrandName"));
-			    product.setProdGoodsName(rs.getString("prodGoodsName"));
-			    product.setProdSalePrice(rs.getInt("prodSalePrice"));
-			    product.setProdPackCapacity(rs.getInt("prodPackCapacity"));
-			    product.setProdPackUnit(rs.getString("prodPackUnit"));
-			    product.setProdSaleWeight(rs.getDouble("prodSaleWeight"));
-			    product.setProdWeightUnit(rs.getString("prodWeightUnit"));
-			    product.setProdExplanation(rs.getString("prodExplanation"));
-			} else {
-				throw new SQLDataException("상품을 찾을 수 없습니다.");
-			}	
-		} catch (Exception e) {
-			// TODO: handle exception
-			System.out.println("ERROR : " + e.getMessage());
-		}
-		
-		return product;
-	}
+    static {
+        try {
+            Context context = new InitialContext();
+            dataSource = (DataSource) context.lookup("java:comp/env/jdbc/Oracle");
+        } catch (NamingException e) {
+            e.printStackTrace();
+        }
+    }
 
+    public List<ProductDto> getAllProducts() {
+        List<ProductDto> products = new ArrayList<>();
+        String sql = "SELECT * FROM product";
+        try (Connection con = dataSource.getConnection();
+             PreparedStatement stmt = con.prepareStatement(sql);
+             ResultSet rs = stmt.executeQuery()) {
+            while (rs.next()) {
+                ProductDto product = new ProductDto();
+                product.setProdId(rs.getInt("PROD_ID"));
+			    product.setProdInspectionDate(rs.getString("PROD_INSPECTION_DATE"));
+			    product.setProdSubcategory(rs.getString("PROD_SUBCATEGORY"));
+			    product.setProdMainCategory(rs.getString("PROD_MAIN_CATEGORY"));
+			    product.setProdRegionName(rs.getString("PROD_REGION_NAME"));
+			    product.setProdImageUrl(rs.getString("PROD_IMAGE_URL"));
+			    product.setProdModelName(rs.getString("PROD_MODEL_NAME"));
+			    product.setProdSalesOfficeName(rs.getString("PROD_SALES_OFFICE_NAME"));
+			    product.setProdBrandName(rs.getString("PROD_BRAND_NAME"));
+			    product.setProdGoodsName(rs.getString("PROD_GOODS_NAME"));
+			    product.setProdSalePrice(rs.getInt("PROD_SALE_PRICE"));
+			    product.setProdPackCapacity(rs.getInt("PROD_PACK_CAPACITY"));
+			    product.setProdPackUnit(rs.getString("PROD_PACK_UNIT"));
+			    product.setProdSaleWeight(rs.getDouble("PROD_SALE_WEIGHT"));
+			    product.setProdWeightUnit(rs.getString("PROD_WEIGHT_UNIT"));
+			    product.setProdExplanation(rs.getString("PROD_EXPLANATION"));
+                products.add(product);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return products;
+    }
 
+    public ProductDto getProductDetail(int prodId) {
+        ProductDto product = null;
+        String sql = "SELECT * FROM product WHERE prod_id = ?";
+        try (Connection con = dataSource.getConnection();
+             PreparedStatement stmt = con.prepareStatement(sql)) {
+            stmt.setInt(1, prodId);
+            try (ResultSet rs = stmt.executeQuery()) {
+                if (rs.next()) {
+                    product = new ProductDto();
+                    product.setProdId(rs.getInt("PROD_ID"));
+    			    product.setProdInspectionDate(rs.getString("PROD_INSPECTION_DATE"));
+    			    product.setProdSubcategory(rs.getString("PROD_SUBCATEGORY"));
+    			    product.setProdMainCategory(rs.getString("PROD_MAIN_CATEGORY"));
+    			    product.setProdRegionName(rs.getString("PROD_REGION_NAME"));
+    			    product.setProdImageUrl(rs.getString("PROD_IMAGE_URL"));
+    			    product.setProdModelName(rs.getString("PROD_MODEL_NAME"));
+    			    product.setProdSalesOfficeName(rs.getString("PROD_SALES_OFFICE_NAME"));
+    			    product.setProdBrandName(rs.getString("PROD_BRAND_NAME"));
+    			    product.setProdGoodsName(rs.getString("PROD_GOODS_NAME"));
+    			    product.setProdSalePrice(rs.getInt("PROD_SALE_PRICE"));
+    			    product.setProdPackCapacity(rs.getInt("PROD_PACK_CAPACITY"));
+    			    product.setProdPackUnit(rs.getString("PROD_PACK_UNIT"));
+    			    product.setProdSaleWeight(rs.getDouble("PROD_SALE_WEIGHT"));
+    			    product.setProdWeightUnit(rs.getString("PROD_WEIGHT_UNIT"));
+    			    product.setProdExplanation(rs.getString("PROD_EXPLANATION"));
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return product;
+    }
+
+    public List<ProductDto> listByCategory(String prodCategory) {
+        List<ProductDto> products = new ArrayList<>();
+        String sql = "SELECT * FROM product WHERE prod_main_category = ?";
+        try (Connection con = dataSource.getConnection();
+             PreparedStatement stmt = con.prepareStatement(sql)) {
+            stmt.setString(1, prodCategory);
+            try (ResultSet rs = stmt.executeQuery()) {
+                while (rs.next()) {
+                    ProductDto product = new ProductDto();
+                    product.setProdId(rs.getInt("PROD_ID"));
+    			    product.setProdInspectionDate(rs.getString("PROD_INSPECTION_DATE"));
+    			    product.setProdSubcategory(rs.getString("PROD_SUBCATEGORY"));
+    			    product.setProdMainCategory(rs.getString("PROD_MAIN_CATEGORY"));
+    			    product.setProdRegionName(rs.getString("PROD_REGION_NAME"));
+    			    product.setProdImageUrl(rs.getString("PROD_IMAGE_URL"));
+    			    product.setProdModelName(rs.getString("PROD_MODEL_NAME"));
+    			    product.setProdSalesOfficeName(rs.getString("PROD_SALES_OFFICE_NAME"));
+    			    product.setProdBrandName(rs.getString("PROD_BRAND_NAME"));
+    			    product.setProdGoodsName(rs.getString("PROD_GOODS_NAME"));
+    			    product.setProdSalePrice(rs.getInt("PROD_SALE_PRICE"));
+    			    product.setProdPackCapacity(rs.getInt("PROD_PACK_CAPACITY"));
+    			    product.setProdPackUnit(rs.getString("PROD_PACK_UNIT"));
+    			    product.setProdSaleWeight(rs.getDouble("PROD_SALE_WEIGHT"));
+    			    product.setProdWeightUnit(rs.getString("PROD_WEIGHT_UNIT"));
+    			    product.setProdExplanation(rs.getString("PROD_EXPLANATION"));
+    			    
+                    products.add(product);
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return products;
+    }
+
+    public List<ProductDto> searchProducts(String query) {
+        List<ProductDto> products = new ArrayList<>();
+        String sql = "SELECT * FROM product WHERE prod_goods_name LIKE ? OR prod_brand_name LIKE ?";
+        try (Connection con = dataSource.getConnection();
+             PreparedStatement stmt = con.prepareStatement(sql)) {
+            String searchQuery = "%" + query + "%";
+            stmt.setString(1, searchQuery);
+            stmt.setString(2, searchQuery);
+            try (ResultSet rs = stmt.executeQuery()) {
+                while (rs.next()) {
+                    ProductDto product = new ProductDto();
+                    product.setProdId(rs.getInt("PROD_ID"));
+    			    product.setProdInspectionDate(rs.getString("PROD_INSPECTION_DATE"));
+    			    product.setProdSubcategory(rs.getString("PROD_SUBCATEGORY"));
+    			    product.setProdMainCategory(rs.getString("PROD_MAIN_CATEGORY"));
+    			    product.setProdRegionName(rs.getString("PROD_REGION_NAME"));
+    			    product.setProdImageUrl(rs.getString("PROD_IMAGE_URL"));
+    			    product.setProdModelName(rs.getString("PROD_MODEL_NAME"));
+    			    product.setProdSalesOfficeName(rs.getString("PROD_SALES_OFFICE_NAME"));
+    			    product.setProdBrandName(rs.getString("PROD_BRAND_NAME"));
+    			    product.setProdGoodsName(rs.getString("PROD_GOODS_NAME"));
+    			    product.setProdSalePrice(rs.getInt("PROD_SALE_PRICE"));
+    			    product.setProdPackCapacity(rs.getInt("PROD_PACK_CAPACITY"));
+    			    product.setProdPackUnit(rs.getString("PROD_PACK_UNIT"));
+    			    product.setProdSaleWeight(rs.getDouble("PROD_SALE_WEIGHT"));
+    			    product.setProdWeightUnit(rs.getString("PROD_WEIGHT_UNIT"));
+    			    product.setProdExplanation(rs.getString("PROD_EXPLANATION"));
+                    products.add(product);
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return products;
+    }
 }
