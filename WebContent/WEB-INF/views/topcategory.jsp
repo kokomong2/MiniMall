@@ -37,7 +37,7 @@
 
 
 <div class="category-container">
-    <div class="category-item" onclick="location.href='/category?type=fruits'">
+    <div class="category-item" onclick="location.href='http://localhost:8080/product/Product.do?action=list'">
         <img src="https://via.placeholder.com/50" alt="전체">
         <span>전체</span>
     </div>

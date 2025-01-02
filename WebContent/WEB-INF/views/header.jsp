@@ -19,7 +19,7 @@
             <a href="/auth/Auth.do?action=logout" class="logout">로그아웃</a>            
             <a href="/customer/Customer.do?action=mypage" class="mypage">마이페이지</a>
             <a href="/customer/Customer.do?action=mypageEditForm" class="mypageEdit">내 정보 수정</a>
-            <a href="#" class="cart">장바구니</a>
+            <a href="/Cart.do?action=list" class="cart">장바구니</a>
         <%
             } else {
         %>
