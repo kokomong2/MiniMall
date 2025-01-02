@@ -16,7 +16,10 @@
     if (customer != null) {
 %>
     <p>안녕하세요, <%= customer.getCust_name() %> 님!</p>
-    <a href="/auth/Login.do?action=loginform">로그아웃</a>
+    <form action="/auth/Login.do" method="get">
+        <input type="hidden" name="action" value="logout"/>
+        <button type="submit">로그아웃</button>
+    </form>
     <a href="/customer/Customer.do?action=mypageEditForm">마이페이지</a>
 <%
     } else {

@@ -41,7 +41,7 @@ public class LoginServlet extends HttpServlet {
             cookie.setPath("/");
             response.addCookie(cookie);
             
-            response.sendRedirect("/Login.do?action=loginform"); 
+            response.sendRedirect("/auth/Login.do?action=loginform"); 
             return;
         } else if ("checkemail".equals(action)) {
         	view = "auth/loginok.jsp";
