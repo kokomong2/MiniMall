@@ -16,13 +16,10 @@
         <div id="carouselExampleControls" class="carousel slide" data-bs-ride="carousel">
             <div class="carousel-inner">
                 <div class="carousel-item active">
-                    <img src="https://www.shutterstock.com/image-vector/online-training-web-banner-design-260nw-1944239320.jpg" class="d-block w-100" alt="...">
+                    <img src="https://ifh.cc/g/dJOKSx.jpg" class="d-block w-100" alt="...">
                 </div>
                 <div class="carousel-item">
-                    <img src="https://www.shutterstock.com/image-vector/online-training-web-banner-design-260nw-1944239320.jpg" class="d-block w-100" alt="...">
-                </div>
-                <div class="carousel-item">
-                    <img src="https://www.shutterstock.com/image-vector/online-training-web-banner-design-260nw-1944239320.jpg" class="d-block w-100" alt="...">
+                    <img src="https://ifh.cc/g/3msAW2.jpg" class="d-block w-100" alt="...">
                 </div>
             </div>
             <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleControls" data-bs-slide="prev">
@@ -36,10 +33,10 @@
         </div>
             <!-- 메인 콘텐츠 -->
     <main>
-        <h1>Top Category</h1>
+        <h3>Top Category</h3><br/>
         <jsp:include page="/WEB-INF/views/product/topcategory.jsp" />
 
-        <h1>Daily Best Sell</h1>
+        <h3>Daily Best Sell</h3><br/>
         <jsp:include page="/WEB-INF/views/product/dailybestsell.jsp" />
     </main>
 

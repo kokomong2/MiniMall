@@ -4,86 +4,97 @@
 <html>
 <head>
 <title>Product List</title>
+<script
+   src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+<link
+   href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css"
+   rel="stylesheet">
 <style>
 body {
-	font-family: Arial, sans-serif;
-	background-color: #f9f9f9;
-	margin: 0;
-	padding: 20px;
+   font-family: Arial, sans-serif;
+   background-color: #f9f9f9;
+   margin: 0;
+   padding: 20px;
 }
 
 h1 {
-	color: #333;
-	text-align: center;
-	margin-bottom: 20px;
+   color: #333;
+   text-align: center;
+   margin-bottom: 20px;
 }
 
 form {
-	text-align: center;
-	margin-bottom: 20px;
+   text-align: center;
+   margin-bottom: 20px;
 }
 
 form input[type="text"] {
-	padding: 10px;
-	font-size: 14px;
-	width: 300px;
-	margin-right: 10px;
+   padding: 10px;
+   font-size: 14px;
+   width: 300px;
+   margin-right: 10px;
 }
 
 form select {
-	padding: 10px;
-	font-size: 14px;
-	margin-right: 10px;
+   padding: 10px;
+   font-size: 14px;
+   margin-right: 10px;
 }
 
 form button {
-	padding: 10px 20px;
-	font-size: 14px;
-	background-color: #4CAF50;
-	color: white;
-	border: none;
-	cursor: pointer;
+   padding: 10px 20px;
+   font-size: 14px;
+   background-color: #4CAF50;
+   color: white;
+   border: none;
+   cursor: pointer;
 }
 
-table {
-	width: 100%;
-	border-collapse: collapse;
-	margin: 0 auto;
-	background-color: #fff;
-	border-radius: 8px;
-	overflow: hidden;
-	box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+.card-deck {
+   display: flex;
+   flex-wrap: wrap;
+   gap: 20px;
+   justify-content: center;
 }
 
-th, td {
-	padding: 10px 15px;
-	text-align: center;
+.card {
+   width: 18rem;
+   margin-bottom: 20px;
+   border: none; /* 실선 없애기 */
+   cursor: pointer; /* 클릭 시 포인터 모양으로 변경 */
 }
 
-th {
-	background-color: #4CAF50;
-	color: white;
+.card img {
+   max-height: 200px;
+   object-fit: cover;
+   border-radius: 4px;
 }
 
-tr:nth-child(even) {
-	background-color: #f2f2f2;
+.card-body {
+   padding: 15px;
 }
 
-tr:hover {
-	background-color: #ddd;
+.card-title {
+   font-size: 1.25rem;
+   font-weight: bold;
 }
 
-img {
-	max-width: 100px;
-	height: auto;
-	border-radius: 4px;
+.card-text {
+   font-size: 1rem;
 }
 
-.no-image {
-	font-size: 12px;
-	color: #888;
+.card:hover {
+   transform: scale(1.05); /* 마우스 오버 시 카드 확대 효과 */
+   transition: transform 0.3s ease-in-out;
+}
+
+/* a 태그에 밑줄 없애는 스타일 추가 */
+a {
+   text-decoration: none; /* 밑줄 제거 */
+   color: inherit; /* 부모 색상 그대로 사용 */
 }
 </style>
+
 </head>
 <body>
 	<!-- 헤더 포함 -->
@@ -111,57 +122,49 @@ img {
 				<option value="곡물" ${selectedMainCategory == '곡물' ? 'selected' : ''}>곡물</option>
 				<option value="버섯" ${selectedMainCategory == '버섯' ? 'selected' : ''}>버섯</option>
 				<option value="기타" ${selectedMainCategory == '기타' ? 'selected' : ''}>기타</option>
-			</select> <select id="sub-category" name="prod_sub_category">
-				<option value="">서브 카테고리를 선택하세요</option>
-			</select>
+			</select> 
+			
+			<!-- 서브 카테고리 드롭다운 -->
+			<c:if test="${not empty subCategories}">
+				<select id="sub-category" name="prod_sub_category">
+					<option value="">서브 카테고리를 선택하세요</option>
+					<c:forEach var="subCategory" items="${subCategories}">
+						<option value="${subCategory}"
+							${selectedSubCategory == subCategory ? 'selected' : ''}>${subCategory}</option>
+					</c:forEach>
+				</select>
+			</c:if>
 
 			<button type="submit">조회</button>
 		</form>
 
-		<table border="1">
-			<tr>
-				<th>Product ID</th>
-				<th>Image</th>
-				<th>Goods Name</th>
-				<th>Brand</th>
-				<th>Price</th>
-				<th>Category</th>
-				<th>Region</th>
-				<th>Explanation</th>
-				<th>Cart</th>
-			</tr>
-			<c:forEach var="product" items="${products}">
-				<tr>
-					<td>${product.prodId}</td>
-					<td><c:choose>
-							<c:when test="${not empty product.prodImageUrl}">
-								<a href="Product.do?action=detailform&prod_id=${product.prodId}">
-									<img src="${product.prodImageUrl}" alt="Product Image">
-								</a>
-							</c:when>
-							<c:otherwise>
-								<div class="no-image">No Image</div>
-							</c:otherwise>
-						</c:choose></td>
-					<td>${product.prodGoodsName}</td>
-					<td>${product.prodBrandName}</td>
-					<td>${product.prodSalePrice}₩</td>
-					<td>${product.prodSubcategory}/${product.prodMainCategory}</td>
-					<td>${product.prodRegionName}</td>
-					<td>${product.prodExplanation}</td>
-					<!-- 장바구니 버튼 -->
-					<td>
-						<form method="post" action="/cart/Cart.do">
-							<input type="hidden" name="custId" value="2" /> <input
-								type="hidden" name="cartQuantity" value="1" min="1" /> <input
-								type="hidden" name="productId" value="${product.prodId}" /> <input
-								type="hidden" name="action" value="addCart" />
-							<button type="submit">Add to Cart</button>
-						</form>
-					</td>
-				</tr>
-			</c:forEach>
-		</table>
+      <!-- 카드로 제품 출력 -->
+      <div class="card-deck">
+         <c:forEach var="product" items="${products}">
+            <!-- 카드 전체를 링크로 감싸기 -->
+            <a href="Product.do?action=detailform&prod_id=${product.prodId}"
+               class="card"> <c:choose>
+                  <c:when test="${not empty product.prodImageUrl}">
+                     <img src="${product.prodImageUrl}" class="card-img-top"
+                        alt="Product Image">
+                  </c:when>
+                  <c:otherwise>
+                     <img src="default-image.jpg" class="card-img-top" alt="No Image">
+                  </c:otherwise>
+               </c:choose>
+               <div class="card-body">
+                  <h5 class="card-title">${product.prodGoodsName}</h5>
+                  <p class="card-text">${product.prodExplanation}</p>
+                  <p class="card-text" style="text-align: right;">
+                     <strong>${product.prodSalePrice}₩</strong>
+                  </p>
+                  <%--                   <p class="card-text">Category: ${product.prodSubcategory}/${product.prodMainCategory}</p>
+ --%>
+               </div>
+            </a>
+         </c:forEach>
+      </div>
+
 	</main>
 
 	<!-- 헤더 포함 -->

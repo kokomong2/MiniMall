@@ -1,6 +1,7 @@
 package com.miniprj.minimall.web;
 
 import java.io.IOException;
+import java.net.URLEncoder;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletConfig;
@@ -94,7 +95,10 @@ public class CustomerServlet extends HttpServlet {
 	        request.getSession().setAttribute("customer", refreshedCustomer);
 
 	        // 리다이렉트로 수정 완료 페이지로 이동
-	        response.sendRedirect("/customer/Customer.do?action=mypageEditForm");
+	        response.sendRedirect("/customer/Customer.do?action=mypageEditForm&functionSuccess=true" 
+	        		   + "&title=" + URLEncoder.encode("회원정보 수정에 성공하였습니다.", "UTF-8")
+	        		   + "&message=" + URLEncoder.encode("변경된 회원정보를 확인하세요.", "UTF-8")
+	        		   + "&redirectUrl=/customer/Customer.do?action=mypageEditForm");
 		}catch(Exception e) {
             request.setAttribute("errorMessage", "정보 수정 중 오류가 발생했습니다: " + e.getMessage());
             RequestDispatcher dispatcher = request.getRequestDispatcher("/WEB-INF/views/auth/signupform.jsp");
