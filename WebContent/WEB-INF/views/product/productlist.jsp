@@ -100,7 +100,9 @@ img {
 		</form>
 
 		<form action="/product/Product.do" method="get">
-			<input type="hidden" name="action" value="category"> 
+			<input type="hidden" name="action" value="category">
+
+			<!-- 메인 카테고리 드롭다운 -->
 			<select id="main-category" name="prod_main_category">
 				<option value="">메인 카테고리를 선택하세요</option>
 				<option value="채소" ${selectedMainCategory == '채소' ? 'selected' : ''}>채소</option>
@@ -111,12 +113,22 @@ img {
 				<option value="곡물" ${selectedMainCategory == '곡물' ? 'selected' : ''}>곡물</option>
 				<option value="버섯" ${selectedMainCategory == '버섯' ? 'selected' : ''}>버섯</option>
 				<option value="기타" ${selectedMainCategory == '기타' ? 'selected' : ''}>기타</option>
-			</select> <select id="sub-category" name="prod_sub_category">
-				<option value="">서브 카테고리를 선택하세요</option>
 			</select>
+
+			<!-- 서브 카테고리 드롭다운 -->
+			<c:if test="${not empty subCategories}">
+				<select id="sub-category" name="prod_sub_category">
+					<option value="">서브 카테고리를 선택하세요</option>
+					<c:forEach var="subCategory" items="${subCategories}">
+						<option value="${subCategory}"
+							${selectedSubCategory == subCategory ? 'selected' : ''}>${subCategory}</option>
+					</c:forEach>
+				</select>
+			</c:if>
 
 			<button type="submit">조회</button>
 		</form>
+
 
 		<table border="1">
 			<tr>
