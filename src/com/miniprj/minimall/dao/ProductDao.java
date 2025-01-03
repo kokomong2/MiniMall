@@ -192,6 +192,31 @@ public class ProductDao {
         return products;
     }
     
+    public List<ProductDto> getTopSellingProducts() {
+        List<ProductDto> products = new ArrayList<>();
+        String sql = "SELECT p.prod_id, p.prod_goods_name, p.prod_sale_price, p.prod_image_url, SUM(o.order_count) AS total_quantity "+
+            "FROM product p JOIN orders o ON p.prod_id = o.prod_id GROUP BY " +
+            "p.prod_id, p.prod_goods_name, p.prod_sale_price, p.prod_image_url " +
+            "ORDER BY total_quantity DESC FETCH FIRST 10 ROWS ONLY";
+
+        try (Connection con = dataSource.getConnection();
+             PreparedStatement stmt = con.prepareStatement(sql);
+             ResultSet rs = stmt.executeQuery()) {
+            while (rs.next()) {
+                ProductDto product = new ProductDto();
+                product.setProdId(rs.getInt("prod_id"));
+                product.setProdGoodsName(rs.getString("prod_goods_name"));
+                product.setProdSalePrice(rs.getInt("prod_sale_price"));
+                product.setProdImageUrl(rs.getString("prod_image_url"));
+                product.setTotal_quantity(rs.getInt("total_quantity"));
+                products.add(product);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return products;
+    }
+    
 
 
 

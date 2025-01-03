@@ -1,4 +1,5 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 <!DOCTYPE html>
 <html lang="ko">
 <head>
@@ -36,8 +37,17 @@
         <h3>Top Category</h3><br/>
         <jsp:include page="/WEB-INF/views/product/topcategory.jsp" />
 
-        <h3>Daily Best Sell</h3><br/>
-        <jsp:include page="/WEB-INF/views/product/dailybestsell.jsp" />
+		<h3>Daily Best Sell</h3><br/>
+		${topSellingProducts}
+		<div class="products-container">
+		    <c:forEach var="product" items="${topSellingProducts}">
+		        <a href="/product-detail?productId=${product.prodId}" class="product-item">
+		            <img src="${product.prodImageUrl != null ? product.prodImageUrl : '/path/to/default-image.png'}" alt="${product.prodGoodsName}">
+		            <h3>${product.prodGoodsName}</h3>
+		            <div class="price">₩${product.prodSalePrice}</div>
+		        </a>
+		    </c:forEach>
+		</div>
     </main>
 
     <!-- 푸터 포함 -->

@@ -25,4 +25,6 @@ public class ProductDto {
 	private double prodSaleWeight;
 	private String prodWeightUnit;
 	private String prodExplanation;
+	private int total_quantity;
+
 }

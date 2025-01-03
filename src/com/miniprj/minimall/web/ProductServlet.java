@@ -66,7 +66,17 @@ public class ProductServlet extends HttpServlet {
 			}
 			json.append("]");
 			response.getWriter().write(json.toString());
-		}
+		} else if ("bestsell".equals(action)) {
+	        // 최다 구매 상품 데이터 가져오기
+	        List<ProductDto> topSellingProducts = dao.getTopSellingProducts();
+	        request.setAttribute("topSellingProducts", topSellingProducts);
+	        request.getRequestDispatcher("/WEB-INF/views/product/dailybestsell.jsp").forward(request, response);
+	    } else {
+	        // 기본 페이지 처리 (index.jsp에 데이터 전달)
+	        List<ProductDto> topSellingProducts = dao.getTopSellingProducts();
+	        request.setAttribute("topSellingProducts", topSellingProducts);
+	        request.getRequestDispatcher("/index.jsp").forward(request, response);
+	    }
     }
 
 
