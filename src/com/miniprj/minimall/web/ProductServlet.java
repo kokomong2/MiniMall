@@ -42,6 +42,7 @@ public class ProductServlet extends HttpServlet {
 			// 상품 상세 정보 JSP로 포워딩
 			request.getRequestDispatcher("/WEB-INF/views/productdetailform.jsp").forward(request, response);
 		}
+
 			
 		
 	}
