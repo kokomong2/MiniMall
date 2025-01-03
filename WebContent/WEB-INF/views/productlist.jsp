@@ -106,7 +106,6 @@
             <option value="곡물">곡물</option>
             <option value="버섯">버섯</option>
             <option value="기타">기타</option>
-      
         </select>
         <button type="submit">조회</button>
     </form>
@@ -124,21 +123,23 @@
         </tr>
         <c:forEach var="product" items="${products}">
             <tr>
-                <td>${product.prodId}</td>
                 <td>
-                    <c:choose>
-                        <c:when test="${not empty product.prodImageUrl}">
-                            <img src="${product.prodImageUrl}" alt="Product Image">
-                        </c:when>
-                        <c:otherwise>
-                            <div class="no-image">No Image</div>
-                        </c:otherwise>
-                    </c:choose>
+                    <a href="/product/Product.do?action=detailform&prod_id=${product.prodId}">
+                        ${product.prodId}
+                    </a>
+                </td>
+                <td>
+                    <c:if test="${not empty product.prodImageUrl}">
+                        <img src="${product.prodImageUrl}" alt="${product.prodGoodsName}">
+                    </c:if>
+                    <c:if test="${empty product.prodImageUrl}">
+                        <span class="no-image">No Image</span>
+                    </c:if>
                 </td>
                 <td>${product.prodGoodsName}</td>
                 <td>${product.prodBrandName}</td>
                 <td>${product.prodSalePrice} ₩</td>
-                <td>${product.prodSubcategory} / ${product.prodMainCategory}</td>
+                <td>${product.prodMainCategory} / ${product.prodSubcategory}</td>
                 <td>${product.prodRegionName}</td>
                 <td>${product.prodExplanation}</td>
             </tr>
