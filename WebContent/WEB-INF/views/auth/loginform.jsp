@@ -139,5 +139,6 @@
     </main>
     <!-- 푸터 포함 -->
     <jsp:include page="/WEB-INF/views/footer.jsp" />
+    <jsp:include page="/WEB-INF/failModal.jsp" />
 </body>
 </html>

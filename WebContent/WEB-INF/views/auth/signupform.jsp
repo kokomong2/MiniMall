@@ -19,6 +19,10 @@
         height: 100vh;
         margin: 0;
     }
+    
+    .field {
+    	margin-bottom: 10px;
+    }
 
     .signup-container {
         background-color: white;
@@ -27,7 +31,7 @@
     }
 
     h1 {
-        font-size: 24px;
+        font-size: 1.8rem;
         margin-bottom: 20px;
         color: #333;
         text-align: center;
@@ -35,14 +39,15 @@
     
     .label {
         display: block;
-        font-size: 13px;
+        font-size: 0.85rem;
+        margin-bottom: 0.5rem;
+        color: #666;
     }
     
     .signup-form input[type="text"],
     .signup-form input[type="password"] {
         width: 100%;
         padding: 10px;
-        margin: 10px 0;
         border: 1px solid #ddd;
         border-radius: 4px;
         box-sizing: border-box;
@@ -59,9 +64,25 @@
         margin-right: 10px; 
     }
     
-    .email-field button {
-        width: 16%; 
+    .email-field button, .postcode-field button {
         height: 37px;
+        background-color: #2e4631; 
+    	color: #fff; 
+    	border: none;
+    	border-radius: 4px;
+    	cursor: pointer;
+    }
+    
+    .postcode-field button {
+        width: 20%; 
+    }
+    
+    .postcode-field button {
+        width: 22%; 
+    }
+
+    .email-field button:hover {
+        background-color: #243626;
     }
 
     .postcode-field input[type="text"] {
@@ -69,33 +90,59 @@
         margin-right: 10px; 
     }
     
-    .postcode-field button {
-        width: 22%; 
-        height: 37px;
+    
+    
+    .button-container {
+        display: flex;
+        justify-content: space-between;
+        margin-top: 30px;
     }
     
-    .signup-btn {
-            background-color: #2c3e50;
-            width: 100%;
-            padding: 10px;
-            color: white;
-            border: none;
-            border-radius: 4px;
-            cursor: pointer;
-            font-size: 16px;
-            margin-top: 10px;
-        }
+    .signup-btn, .reset-btn {
+        width: 100%;
+        padding: 0.8rem;
+        font-size: 1rem;
+        border-radius: 4px;
+        cursor: pointer;
+    }
 
-        .signup-btn:hover {
-            background-color: #1a242f;
-        }
+    .signup-btn {
+        color: #fff;
+        background-color: #2e4631;
+        border: none;
+        margin-right: 10px;
+    }
+
+    .signup-btn:hover {
+        background-color: #243626;
+    }
+
+    .reset-btn {
+        background-color: #fff;
+        border: 1px solid #2e4631;
+        color: #2e4631;
+    }
+
+    .reset-btn:hover {
+        background-color: #f3f3f3;
+    }
+
+    a {
+        text-decoration: none;
+        color: inherit;
+    }
     
+    span {
+    	font-size: 11px;
+    }
 </style>
+
 </head>
 <body>
 <div class="container">
+	<jsp:include page="/WEB-INF/views/header.jsp" />
     <div class="signup-container">
-		<h1>회원가입 폼</h1>
+		<h1>회원가입</h1>
 		<form action="/auth/Auth.do?action=signup" method="post" class="signup-form">
         	<div class="field">
         		<label class="label" for="cust_name">이름</label>
@@ -124,58 +171,33 @@
             <div class="field">
                 <label class="label" for="sample6_postcode">우편번호</label>
                 <div class="postcode-field">
-                	<input type="text" id="sample6_postcode" name="cust_postcode" size="50">
+                	<input type="text" id="sample6_postcode" name="cust_postcode" size="50" placeholder="우편번호를 입력해주세요">
                 	<button type="button" onclick="sample6_execDaumPostcode()">우편번호 찾기</button>
                 </div>
             </div>
             <div class="field">
                 <label class="label" for="sample6_address">주소</label>
-                <input type="text" id="sample6_address" name="cust_address" size="50">
+                <input type="text" id="sample6_address" name="cust_address" size="50" placeholder="주소를 입력해주세요">
             </div>
             <div class="field">
                 <label class="label" for="sample6_detailAddress">상세주소</label>
                 <input type="text" id="sample6_detailAddress" name="cust_detail_address" placeholder="상세주소를 입력해주세요">
             </div>
 			
-
-			<input type="submit" value="  저 장  "> 
-			<input type="reset" value="  취  소  ">
-			
+    		<div class="button-container">
+    			<input type="hidden" name="action" value="signupform">
+            	<button type="submit" class="signup-btn">회원가입</button>
+            	<button type="button" class="reset-btn">
+            		<a href="http://localhost:8080/auth/Auth.do?action=loginform">로그인</a>
+            	</button>
+            </div>
+			</a>	
 		</form>
 	</div>
+</div>
+	<jsp:include page="/WEB-INF/successModal.jsp" />
+	<jsp:include page="/WEB-INF/views/footer.jsp" />
 </div>
 </body>
 </html>
 
-<!-- 			<table>
-				 <tr>
-					 <td class="label">이 름</td>
-					 <td class="field"><input type="text" name="cust_name"></td>
-				 </tr>
-				 <tr>
-					 <td class="label">이 메 일</td>
-					 <td class="field"><input type="email" name="cust_email"></td>
-				 </tr>
-				 <tr>
-					 <td class="label">비 밀 번 호</td>
-					 <td class="field"><input type="password" name="cust_password"></td>
-				 </tr>
-				 <tr>
-					 <td class="label" >비 밀 번 호 확 인</td>
-					 <td class="field"><input type="password" name="passwordCheck"></td>
-				 </tr>
-				 <tr>
-					 <td class="label" >연 락 처</td>
-					 <td class="field"><input type="text" name="cust_phone_num"></td>
-				 </tr>
-				 <tr>
-					 <td class="label" >주 소</td>
-					 <td class="field">
-						<input type="text" id="sample6_postcode" name="cust_postcode" placeholder="우편번호">
-						<input type="button" onclick="sample6_execDaumPostcode()" value="우편번호 찾기"><br>
-						<input type="text" id="sample6_address" name="cust_address" placeholder="주소">
-						<input type="text" id="sample6_detailAddress" name="cust_detail_address" placeholder="상세주소">
-					 </td>
-				 </tr>
-				 
-			 </table> -->

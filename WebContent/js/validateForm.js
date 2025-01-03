@@ -4,7 +4,7 @@ function validateEmail() {
     const emailMessage = document.createElement('span');
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     
-    if (emailField.nextSibling) {
+    if (emailField.nextSibling && emailField.nextSibling.tagName === "SPAN") {
         emailField.nextSibling.remove();
     }
   
@@ -82,4 +82,4 @@ window.onload = function() {
     document.querySelector('input[name="cust_password"]').addEventListener('blur', validatePassword);
     document.querySelector('input[name="cust_confirm_password"]').addEventListener('blur', matchPassword);
     document.querySelector('input[name="cust_phone_num"]').addEventListener('blur', validatePhoneNumber);
-};
+};0
