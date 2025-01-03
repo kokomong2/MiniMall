@@ -2,6 +2,7 @@ package com.miniprj.minimall.web;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import javax.servlet.RequestDispatcher;
@@ -118,6 +119,11 @@ public class OrderServlet extends HttpServlet {
         String[] prodIdParams = request.getParameterValues("prodId");
         String[] orderCountParams = request.getParameterValues("orderCount");
         String[] orderPriceParams = request.getParameterValues("orderPrice");
+
+        // 콘솔에 값 찍어보기
+        System.out.println("prodIdParams: " + Arrays.toString(prodIdParams));
+        System.out.println("orderCountParams: " + Arrays.toString(orderCountParams));
+        System.out.println("orderPriceParams: " + Arrays.toString(orderPriceParams));
 
         if (prodIdParams == null || prodIdParams.length == 0) {
             response.getWriter().println("상품이 선택되지 않았습니다!");

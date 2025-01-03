@@ -4,6 +4,11 @@
 <html lang="ko">
 <head>
     <meta charset="UTF-8">
+    <script
+	src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+<link
+	href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css"
+	rel="stylesheet">
     <title>마이페이지</title>
 
     <style>

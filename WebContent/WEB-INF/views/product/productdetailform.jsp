@@ -148,70 +148,86 @@ body {
          <!-- 제품 정보 -->
          <div class="product-info">
             <div class="product-header">
-               <h1>
-                  <br>
-                  <br>${product.prodGoodsName}</h1>
+               <h1>${product.prodGoodsName}</h1>
             </div>
-            <%--                <div class="info-row">
-                   ${product.prodId}
-               </div> --%>
-
             <div class="info-row">${product.prodSalePrice}₩</div>
-            <%--                <div class="info-row">
-                   ${product.prodMainCategory} / ${product.prodSubcategory}
-               </div> --%>
-            <div class="info-row">${product.prodRegionName}&nbsp
-               ${product.prodBrandName}</div>
-            <div class="info-row">${product.prodSaleWeight}
-               ${product.prodWeightUnit}</div>
+            <div class="info-row">${product.prodRegionName}&nbsp;${product.prodBrandName}</div>
+            <div class="info-row">${product.prodSaleWeight} ${product.prodWeightUnit}</div>
 
-            <!-- 버튼들 -->
-            <div class="product-actions">
-               <form action="/cart/Cart.do" method="post">
-                  <input type="hidden" name="productId" value="${product.prodId}" />
-                  <input type="hidden" name="custId" value="2" /> <input
-                     type="number" name="cartQuantity" class="quantity-input"
-                     value="1" min="1" /> <input type="hidden" name="action"
-                     value="addCart" />
 
-                  <button type="submit" id="cartBtn">장바구니</button>
-               </form>
 
-               <form action="/order/Order.do" method="post">
-                  <input type="hidden" name="action" value="buy"> <input
-                     type="hidden" name="prodId" value="${product.prodId}"> <input
-                     type="hidden" name="customerEmail"
-                     value="${sessionScope.customer.cust_email}">
-                  <button type="submit" class="buy-button">구매하기</button>
-               </form>
+
+
+<div class="product-actions">
+<!-- 장바구니 폼 -->
+<form action="/cart/Cart.do" method="post">
+    <input type="hidden" name="productId" value="${product.prodId}" />
+    <input type="hidden" name="custId" value="2" />
+    
+    <!-- 장바구니 수량 -->
+    <input type="number" name="cartQuantity" class="quantity-input" value="1" min="1" id="cartQuantity" oninput="syncQuantities()"/>
+
+    <input type="hidden" name="action" value="addCart" />
+    <button type="submit" id="cartBtn">장바구니</button>
+</form>
+
+<!-- 구매 폼 -->
+<form id="orderForm" action="/order/Order.do" method="post">
+    <input type="hidden" name="action" value="buy">
+    <input type="hidden" name="prodId" value="${product.prodId}"> <!-- 상품 ID -->
+    <input type="hidden" name="orderPrice" value="${product.prodSalePrice}"> <!-- 가격 -->
+    <input type="hidden" name="customerEmail" value="${sessionScope.customer.cust_email}">
+    
+    <!-- 구매 수량 (숨겨서 사용) -->
+    <input type="number" id="orderCount" name="orderCount" class="quantity-input" value="1" min="1" style="display: none;" />
+
+    <!-- 구매하기 버튼 -->
+    <button type="button" class="buy-button" onclick="submitCheckedItems()">구매하기</button>
+</form>
+
+
+
             </div>
          </div>
       </div>
+
+<script>
+    // 장바구니 수량과 구매 수량을 동일하게 유지하는 함수
+    function syncQuantities() {
+        const cartQuantity = document.getElementById('cartQuantity').value; // 장바구니 수량
+        document.getElementById('orderCount').value = cartQuantity; // 구매 수량에 동일하게 반영
+    }
+
+    // 구매 버튼 클릭 시 동작하는 함수
+    function submitCheckedItems() {
+        const cartQuantity = document.getElementById('orderCount').value; // 구매 수량
+
+        // 폼 데이터 확인 (디버깅 용)
+        const form = document.getElementById('orderForm');
+        const formData = new FormData(form);
+        formData.forEach((value, key) => {
+            console.log(key + ': ' + value); // key와 value를 콘솔에 찍어본다
+        });
+
+        // 폼 제출 전에 orderCount 값 확인
+        console.log("orderCount: ", document.getElementById('orderCount').value);
+
+        // 폼 제출
+        form.submit(); // 폼을 직접 제출
+    }
+</script>
 
       <!-- 부가적인 설명 -->
       <div class="product-description">
          <p style="text-align: right;">
-            <!-- 오른쪽 정렬 추가 -->
-            <strong>${product.prodGoodsName}</strong><br>
-            <br>
-         <div class="image"
-            style="width: 50%; text-align: center; margin: 0 auto;">
-            <img src="${product.prodImageUrl}" alt="${product.prodGoodsName}"
-               style="width: 80%;">
+            <strong>${product.prodGoodsName}</strong><br><br>
+         <div class="image" style="width: 50%; text-align: center; margin: 0 auto;">
+            <img src="${product.prodImageUrl}" alt="${product.prodGoodsName}" style="width: 80%;">
          </div>
-
-<%--          <span style="display: block; text-align: right; margin-right: 220px;">${product.prodBrandName}</span><br>
-         <br> <span style="display: block; text-align: right;margin-right: 220px;">${product.prodSalePrice}
-            ₩</span><br>
-         <br> <span style="display: block; text-align: right;margin-right: 220px;">${product.prodMainCategory}
-            / ${product.prodSubcategory}</span><br>
-         <br> <span style="display: block; text-align: right;margin-right: 220px;">${product.prodRegionName}</span><br>
-         <br> <span style="display: block; text-align: right;margin-right: 220px;">${product.prodSaleWeight}${product.prodWeightUnit}</span><br>
-         <br> --%>
          </p>
       </div>
-        <jsp:include page="/WEB-INF/views/product/dailybestsell.jsp" />
 
+      <jsp:include page="/WEB-INF/views/product/dailybestsell.jsp" />
    </main>
 
    <jsp:include page="/WEB-INF/views/footer.jsp" />

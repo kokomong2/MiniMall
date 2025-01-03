@@ -5,6 +5,11 @@
 <html>
 <head>
 <meta charset="UTF-8">
+<script
+	src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+<link
+	href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css"
+	rel="stylesheet">
 <title>구매 내역</title>
 <style>
 

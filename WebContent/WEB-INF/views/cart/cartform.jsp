@@ -1,96 +1,102 @@
-<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
-<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+	pageEncoding="UTF-8"%>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 <!DOCTYPE html>
 <html>
 <head>
-    <meta charset="UTF-8">
-    <title>장바구니</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            margin: 20px;
-            color: #333;
-            background-color: #f9f9f9;
-        }
+<meta charset="UTF-8">
+<script
+	src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+<link
+	href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css"
+	rel="stylesheet">
+<title>장바구니</title>
+<style>
+body {
+	font-family: Arial, sans-serif;
+	margin: 20px;
+	color: #333;
+	background-color: #f9f9f9;
+}
 
-        h1 {
-            text-align: center;
-            color: #444;
-            margin-bottom: 30px;
-        }
+h1 {
+	text-align: center;
+	color: #444;
+	margin-bottom: 30px;
+}
 
-        table {
-            width: 100%;
-            border-collapse: collapse;
-            margin-bottom: 20px;
-            background-color: #fff;
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-        }
+table {
+	width: 100%;
+	border-collapse: collapse;
+	margin-bottom: 20px;
+	background-color: #fff;
+	box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
 
-        th, td {
-            border: 1px solid #ddd;
-            padding: 12px;
-            text-align: center;
-        }
+th, td {
+	border: 1px solid #ddd;
+	padding: 12px;
+	text-align: center;
+}
 
-        th {
-            background-color: #f4f4f4;
-            font-weight: bold;
-        }
+th {
+	background-color: #f4f4f4;
+	font-weight: bold;
+}
 
-        tr:nth-child(even) {
-            background-color: #f9f9f9;
-        }
+tr:nth-child(even) {
+	background-color: #f9f9f9;
+}
 
-        input[type="number"] {
-            width: 60px;
-            text-align: center;
-            padding: 5px;
-            border: 1px solid #ccc;
-            border-radius: 4px;
-        }
+input[type="number"] {
+	width: 60px;
+	text-align: center;
+	padding: 5px;
+	border: 1px solid #ccc;
+	border-radius: 4px;
+}
 
-        input[type="checkbox"] {
-            transform: scale(1.2);
-        }
+input[type="checkbox"] {
+	transform: scale(1.2);
+}
 
-        button {
-            background-color: #007BFF;
-            color: #fff;
-            border: none;
-            padding: 10px 15px;
-            border-radius: 4px;
-            cursor: pointer;
-            font-size: 14px;
-        }
+button {
+	background-color: #007BFF;
+	color: #fff;
+	border: none;
+	padding: 10px 15px;
+	border-radius: 4px;
+	cursor: pointer;
+	font-size: 14px;
+}
 
-        button:hover {
-            background-color: #0056b3;
-        }
+button:hover {
+	background-color: #0056b3;
+}
 
-        #total-payment {
-            font-size: 18px;
-            font-weight: bold;
-            text-align: right;
-            margin-top: 10px;
-        }
+#total-payment {
+	font-size: 18px;
+	font-weight: bold;
+	text-align: right;
+	margin-top: 10px;
+}
 
-        .button-container {
-            text-align: right;
-        }
+.button-container {
+	text-align: right;
+}
 
-        .button-container button {
-            margin-top: 10px;
-        }
+.button-container button {
+	margin-top: 10px;
+}
 
-        .product-image {
-            width: 50px;
-            height: 50px;
-            object-fit: cover;
-            border-radius: 4px;
-        }
-    </style>
-    <script>
+.product-image {
+	width: 50px;
+	height: 50px;
+	object-fit: cover;
+	border-radius: 4px;
+}
+</style>
+<script>
         function toggleAllCheckboxes(source) {
             const checkboxes = document.querySelectorAll('.item-checkbox');
             checkboxes.forEach(function(checkbox) {
@@ -205,64 +211,71 @@
 </head>
 <body>
 
-    <!-- 헤더 포함 -->
-    <jsp:include page="/WEB-INF/views/header.jsp" />
-    
-    <main>
-	    <h1>장바구니</h1>
-	
-	    <table>
-	        <thead>
-	            <tr>
-	                <th><input type="checkbox" onclick="toggleAllCheckboxes(this)" /></th>
-	                <th>이미지</th>
-	                <th>상품 ID</th>
-	                <th>상품명</th>
-	                <th>가격</th>
-	                <th>수량</th>
-	                <th>총 가격</th>
-	                <th>삭제</th>
-	            </tr>
-	        </thead>
-				<tbody>
-				    <c:forEach var="item" items="${cartList}">
-				        <tr>
-				            <td><input type="checkbox" name="cartIds" value="${item.cartId}" class="item-checkbox" /></td>
-				            <td><img src="${item.product.prodImageUrl}" alt="상품 이미지" class="product-image" /></td>
-				            <td><input type="hidden" class="prodId" value="${item.product.prodId}" />${item.product.prodId}</td>
-				            <td>${item.product.prodModelName}</td>
-				            <td class="product-price">${item.product.prodSalePrice}</td>
-				            <td><input type="number" class="quantity-input" value="${item.cartCount}" min="1" /></td>
-				            <td class="total-price">${item.product.prodSalePrice * item.cartCount}원</td>
-				            <td>
-				                <form method="post" action="/cart/Cart.do">
-				                    <input type="hidden" name="cartId" value="${item.cartId}" />
-				                    <input type="hidden" name="action" value="removeCart" />
-				                    <button type="submit">삭제</button>
-				                </form>
-				            </td>
-				        </tr>
-				    </c:forEach>
-				</tbody>
-	    </table>
-	
-	    <div id="total-payment">0원</div>
-	
+	<!-- 헤더 포함 -->
+	<jsp:include page="/WEB-INF/views/header.jsp" />
+
+	<main>
+		<h1>장바구니</h1>
+
+		<table>
+			<thead>
+				<tr>
+					<th><input type="checkbox" onclick="toggleAllCheckboxes(this)" /></th>
+					<th>이미지</th>
+					<th>상품 ID</th>
+					<th>상품명</th>
+					<th>가격</th>
+					<th>수량</th>
+					<th>총 가격</th>
+					<th>삭제</th>
+				</tr>
+			</thead>
+			<tbody>
+				<c:forEach var="item" items="${cartList}">
+					<tr>
+						<td><input type="checkbox" name="cartIds"
+							value="${item.cartId}" class="item-checkbox" /></td>
+						<td><img src="${item.product.prodImageUrl}" alt="상품 이미지"
+							class="product-image" /></td>
+						<td><input type="hidden" class="prodId"
+							value="${item.product.prodId}" />${item.product.prodId}</td>
+						<td>${item.product.prodModelName}</td>
+						<td class="product-price">${item.product.prodSalePrice}</td>
+						<td><input type="number" class="quantity-input"
+							value="${item.cartCount}" min="1" /></td>
+						<td class="total-price">${item.product.prodSalePrice * item.cartCount}원</td>
+						<td>
+							<form method="post" action="/cart/Cart.do">
+								<input type="hidden" name="cartId" value="${item.cartId}" /> <input
+									type="hidden" name="action" value="removeCart" />
+								<button type="submit">삭제</button>
+							</form>
+						</td>
+					</tr>
+				</c:forEach>
+			</tbody>
+		</table>
+
+		<div id="total-payment">0원</div>
+
 		<div class="button-container">
-		    <form id="orderForm" action="/order/Order.do" method="post">
-		        <input type="hidden" name="action" value="buy">
-		        <c:forEach var="item" items="${cartList}">
-		            <input type="hidden" class="prodId" value="${item.product.prodId}" />
-		            <input type="hidden" class="orderCount" value="${item.cartCount}" />
-		            <input type="hidden" class="orderPrice" value="${item.product.prodSalePrice * item.cartCount}" />
-		        </c:forEach>
-		        <input type="hidden" name="customerEmail" value="${sessionScope.customer.cust_email}" />
-		        <button type="button" class="buy-button" onclick="submitCheckedItems()">구매하기</button>
-		    </form>
+			<form id="orderForm" action="/order/Order.do" method="post">
+				<input type="hidden" name="action" value="buy">
+				<c:forEach var="item" items="${cartList}">
+					<input type="hidden" class="prodId" value="${item.product.prodId}" />
+					<input type="hidden" class="orderCount" value="${item.cartCount}" />
+					<input type="hidden" class="orderPrice"
+						value="${item.product.prodSalePrice * item.cartCount}" />
+				</c:forEach>
+				<input type="hidden" name="customerEmail"
+					value="${sessionScope.customer.cust_email}" />
+				<button type="button" class="buy-button"
+					onclick="submitCheckedItems()">구매하기</button>
+			</form>
 		</div>
 	</main>
-	
+
 	<jsp:include page="/WEB-INF/views/footer.jsp" />
-	
+
 </body>
 </html>

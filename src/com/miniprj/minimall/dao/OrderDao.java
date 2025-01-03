@@ -64,7 +64,8 @@ public class OrderDao {
 
             con = dataSource.getConnection();
             String sql = "INSERT INTO Orders (order_count, order_price, cust_id, prod_id, order_date, order_address, order_num) " +
-                         "VALUES (?, ?, ?, ?, ?, ?, ?)";
+                    "VALUES (?, ?, ?, ?, ?, ?, ?)";
+
             stmt = con.prepareStatement(sql);
 
             stmt.setInt(1, order.getOrderCount());
@@ -85,6 +86,7 @@ public class OrderDao {
             closeResources(null, stmt, con);
         }
     }
+
 
 
     // 리소스 정리

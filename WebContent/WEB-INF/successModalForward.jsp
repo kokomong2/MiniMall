@@ -32,19 +32,19 @@
         right: 20px;
     }
     .modal-img {
-    	width: 70px;
-    	height: 70px;
-    	margin-top: 10px;
+       width: 70px;
+       height: 70px;
+       margin-top: 10px;
     }
     .ok-btn {
-    	background-color: #13a270;
-    	border: 1px solid #13a270;
-    	border-radius: 4px;
-    	color: #fff;
-    	width: 100%;
-    	padding: 0.5rem;
-    	margin-top: 10px;
-    	font-size: 0.9rem;
+       background-color: #13a270;
+       border: 1px solid #13a270;
+       border-radius: 4px;
+       color: #fff;
+       width: 100%;
+       padding: 0.5rem;
+       margin-top: 10px;
+       font-size: 0.9rem;
     }
 
 </style>
@@ -53,8 +53,8 @@
     <div class="modal-content">
         <span class="close">&times;</span>
         <img src="/img/success.png" alt="성공 이미지" class="modal-img">
-        <h3>${param.title}</h3>
-        <p>${param.message}</p>
+        <h3>${title}</h3>
+        <p>${message}</p>
         <button id="redirectLogin" class="ok-btn">확인</button>
     </div>
 </div>
@@ -68,7 +68,7 @@
         modal.style.display = "block";
 
         redirectLoginBtn.onclick = function() {
-        	var redirectUrl = '${param.redirectUrl}';  
+           var redirectUrl = '${redirectUrl}';  
             window.location.href = redirectUrl;
         };
 
@@ -84,7 +84,7 @@
     }
 
     document.addEventListener('DOMContentLoaded', function() {
-        if ('${param.functionSuccess}' == 'true') {
+        if ('${functionSuccess}' == 'true') {
             showSuccessModal();
         } 
     });
