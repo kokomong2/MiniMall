@@ -56,6 +56,19 @@
             font-size: 12px;
             color: #888;
         }
+
+        button {
+            padding: 8px 12px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            cursor: pointer;
+            border-radius: 5px;
+        }
+
+        button:hover {
+            background-color: #45a049;
+        }
     </style>
 </head>
 <body>
@@ -93,18 +106,48 @@
                 <td>${product.prodSubcategory} / ${product.prodMainCategory}</td>
                 <td>${product.prodRegionName}</td>
                 <td>${product.prodExplanation}</td>
-                <!-- 장바구니 버튼 -->
+                <!-- AJAX 장바구니 버튼 -->
                 <td>
-                    <form method="post" action="/Cart.do">
-                      	<input type="hidden" name="custId" value="2"/>
-                      	<input type="hidden" name="cartQuantity" value="1" min="1"/>
-					    <input type="hidden" name="productId" value="${product.prodId}" />
-					    <input type="hidden" name="action" value="addCart" />
-				    	<button type="submit">Add to Cart</button>
-					</form>
+                    <button type="button" class="add-to-cart" 
+                            data-product-id="${product.prodId}" 
+                            data-cust-id="2">Add to Cart</button>
                 </td>
             </tr>
         </c:forEach>
     </table>
+
+    <script>
+        // AJAX 요청을 통해 장바구니에 상품 추가
+        document.querySelectorAll(".add-to-cart").forEach(button => {
+            button.addEventListener("click", () => {
+                const productId = button.getAttribute("data-product-id");
+                const custId = button.getAttribute("data-cust-id");
+
+                fetch("/Cart.do", {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/x-www-form-urlencoded",
+                    },
+                    body: new URLSearchParams({
+                        action: "addCart",
+                        productId: productId,
+                        custId: custId,
+                        cartQuantity: 1,
+                    }),
+                })
+                .then(response => {
+                    if (response.ok) {
+                        alert("상품이 장바구니에 추가되었습니다.");
+                    } else {
+                        alert("장바구니 추가에 실패했습니다.");
+                    }
+                })
+                .catch(error => {
+                    console.error("Error:", error);
+                    alert("오류가 발생했습니다. 다시 시도해주세요.");
+                });
+            });
+        });
+    </script>
 </body>
 </html>

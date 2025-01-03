@@ -392,72 +392,82 @@
         <div><input type="checkbox" onclick="toggleAllCheckboxes(this)" /></div>
         
         <tbody>
-	    <c:forEach var="item" items="${cartList}">
+	        <c:choose>
+		        <c:when test="${not empty cartList}">
+				    <c:forEach var="item" items="${cartList}">
+			
+			            <tr class="cart_bgr">
+							<div style="display: flex; align-items: center;">
+								
+								<!-- CHECK BOX -->
+								<td>
+					                <div style="display: flex; justify-content: space-between; align-items: center;">
+					                    <input type="checkbox" name="cartIds" value="${item.cartId}" class="item-checkbox" />
+									</div>
+								</td>
+								
+								<!-- IMAGE -->
+								<td>
+								    <a href="product/Product.do?action=detailform&prod_id=${item.product.prodId}">
+								        <img src="${item.product.prodImageUrl}" alt="상품 이미지" class="product-image" />
+								    </a>
+								</td>
+			
+				                
+								<!-- INFORMATION -->
+				                <td style="text-align: left;">
+				                	<a href="product/Product.do?action=detailform&prod_id=${item.product.prodId}">
+					                    <div style="font-size: 18px; font-weight: bold; margin-bottom: 4px;">
+					                        ${item.product.prodModelName} 
+					                    </div>
+				                    </a>
+				                    <div style="font-size: 13px; margin-bottom: 4px; color:#848484">
+				                        No.${item.product.prodId}  ${item.product.prodBrandName}
+				                    </div>
+				                    <div class="product-price" style="font-size: 15px;">
+				                        ${item.product.prodSalePrice}
+				                    </div>
+				                </td>
+			
+				                <!-- QUANTITY -->
+				                <td>
+				                    <div class="quantity-container">
+				                    	<button onclick="updateQuantity(this, -1,${item.cartId})">-</button>
+							            <input type="number" name="quantities" value="${item.cartCount}" min="1" 
+							            class="quantity-input" 
+							            onchange="validateInput(this,${item.cartId})">
+							            <button onclick="updateQuantity(this, 1,${item.cartId})">+</button>
+				                    </div>
+				                </td>
+				                
+				                <td style="position: relative;">
+								    
+								    <!-- DELETE BUTTON -->
+								    <form method="post" action="/Cart.do" style="position: absolute; top: 0; right: 0; display:inline;">
+								        <input type="hidden" name="cartId" value="${item.cartId}" />
+								        <input type="hidden" name="action" value="removeCart" />
+								        <button type="submit" style="border: none; background: none; cursor: pointer;">
+								            <img src="https://i.ibb.co/zfr4JRD/trash-can.png" alt="trash-can" style="width: 20px; height: auto;">
+								        </button>
+								    </form>
+								    
+								    <!-- PRICE -->
+								    <div class="total-price" style="font-weight: bold;">
+								        ${item.product.prodSalePrice * item.cartCount}원
+								    </div>
+								</td>
+			                </div>
+			            </tr>
+				            
+				    </c:forEach>
+		    	</c:when>
 
-            <tr class="cart_bgr">
-				<div style="display: flex; align-items: center;">
-					
-					<!-- CHECK BOX -->
-					<td>
-		                <div style="display: flex; justify-content: space-between; align-items: center;">
-		                    <input type="checkbox" name="cartIds" value="${item.cartId}" class="item-checkbox" />
-						</div>
-					</td>
-					
-					<!-- IMAGE -->
-					<td>
-					    <a href="product/Product.do?action=detailform&prod_id=${item.product.prodId}">
-					        <img src="${item.product.prodImageUrl}" alt="상품 이미지" class="product-image" />
-					    </a>
-					</td>
-
-	                
-					<!-- INFORMATION -->
-	                <td style="text-align: left;">
-	                	<a href="product/Product.do?action=detailform&prod_id=${item.product.prodId}">
-		                    <div style="font-size: 18px; font-weight: bold; margin-bottom: 4px;">
-		                        ${item.product.prodModelName} 
-		                    </div>
-	                    </a>
-	                    <div style="font-size: 13px; margin-bottom: 4px; color:#848484">
-	                        No.${item.product.prodId}  ${item.product.prodBrandName}
-	                    </div>
-	                    <div class="product-price" style="font-size: 15px;">
-	                        ${item.product.prodSalePrice}
-	                    </div>
-	                </td>
-
-	                <!-- QUANTITY -->
-	                <td>
-	                    <div class="quantity-container">
-	                    	<button onclick="updateQuantity(this, -1,${item.cartId})">-</button>
-				            <input type="number" name="quantities" value="${item.cartCount}" min="1" 
-				            class="quantity-input" 
-				            onchange="validateInput(this,${item.cartId})">
-				            <button onclick="updateQuantity(this, 1,${item.cartId})">+</button>
-	                    </div>
-	                </td>
-	                
-	                <td style="position: relative;">
-					    
-					    <!-- DELETE BUTTON -->
-					    <form method="post" action="/Cart.do" style="position: absolute; top: 0; right: 0; display:inline;">
-					        <input type="hidden" name="cartId" value="${item.cartId}" />
-					        <input type="hidden" name="action" value="removeCart" />
-					        <button type="submit" style="border: none; background: none; cursor: pointer;">
-					            <img src="https://i.ibb.co/zfr4JRD/trash-can.png" alt="trash-can" style="width: 20px; height: auto;">
-					        </button>
-					    </form>
-					    
-					    <!-- PRICE -->
-					    <div class="total-price" style="font-weight: bold;">
-					        ${item.product.prodSalePrice * item.cartCount}원
-					    </div>
-					</td>
-                </div>
-            </tr>
-	            
-	    </c:forEach>
+            <c:otherwise>
+                <tr>
+                    <td colspan="3" style="text-align:center;">장바구니가 비어있습니다.</td>
+                </tr>
+            </c:otherwise>
+        </c:choose>
 	</tbody>
 
     </table>

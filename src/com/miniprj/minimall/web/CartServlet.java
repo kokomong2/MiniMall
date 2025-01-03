@@ -5,6 +5,7 @@ import java.util.List;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
+import javax.servlet.annotation.MultipartConfig;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -13,7 +14,7 @@ import javax.servlet.http.HttpServletResponse;
 import com.miniprj.minimall.dao.CartDao;
 import com.miniprj.minimall.model.CartDto;
 
-
+@MultipartConfig
 @WebServlet("/Cart.do")
 public class CartServlet extends HttpServlet 
 {
@@ -34,7 +35,6 @@ public class CartServlet extends HttpServlet
 		 
 		 if("list".equals(action))
 		 {
-			 System.out.println("this one is working");
 			 int cust_id=2;//임시로 회원 정함
 			 List<CartDto> cartList = cartDao.listCartWithProductInfo(cust_id);
 		     request.setAttribute("cartList", cartList);
@@ -46,16 +46,16 @@ public class CartServlet extends HttpServlet
 	
 	 
 	 
-	 
-	 
 	 @Override
 	 protected void doPost(HttpServletRequest request, HttpServletResponse response)
 	         throws ServletException, IOException 
 	 {
 	     String action = request.getParameter("action");
-	
+	     System.out.println("Received action: " + action);
+
 	     if ("addCart".equals(action)) 
 	     {
+	    	 
 	         // 장바구니에 상품을 추가
 	    	 String prod_id = request.getParameter("productId");
 		     String cust_id = request.getParameter("custId");

@@ -28,9 +28,6 @@
             height: auto;
             border-radius: 5px;
         }
-        .product-info {
-            padding: 20px;
-        }
         .product-info table {
             width: 100%;
             border-collapse: collapse;
@@ -44,9 +41,117 @@
             background-color: #f2f2f2;
             width: 30%;
         }
+        button {
+            padding: 10px 15px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            cursor: pointer;
+            border-radius: 5px;
+        }
+        button:hover {
+            background-color: #45a049;
+        }
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.4);
+            overflow: auto;
+            padding-top: 60px;
+        }
+        .modal-content {
+            background-color: white;
+            margin: 5% auto;
+            padding: 20px;
+            border: 1px solid #888;
+            width: 500px;
+            text-align: center;
+            border-radius: 10px;
+        }
+        .close-button {
+            color: #aaa;
+            font-size: 28px;
+            font-weight: bold;
+            position: absolute;
+            top: 10px;
+            right: 25px;
+        }
+        .close-button:hover,
+        .close-button:focus {
+            color: black;
+            text-decoration: none;
+            cursor: pointer;
+        }
     </style>
+    <script>
+        // modal
+        function showModal() {
+            document.getElementById("cartModal").style.display = "block";
+        }
+
+        function closeModal(event) {
+            if (event) {
+                event.stopPropagation();
+            }
+            document.getElementById("cartModal").style.display = "none";
+        }
+
+        function goToCart() {
+            document.getElementById("cartModal").style.display = "none";
+            window.location.href = '/Cart.do?action=list';
+        }
+		
+        
+        //add listener
+        document.addEventListener("DOMContentLoaded", function () {
+            var cartBtn = document.getElementById("cartBtn");
+
+            cartBtn.addEventListener("click", function () {
+                const formData = new FormData(document.getElementById("cartForm"));
+
+                fetch('/Cart.do', {
+                    method: 'POST',
+                    body: formData
+                })
+                .then(function (response) {
+                    if (response.ok) {
+                        return response.text();
+                    } else {
+                        throw new Error('bad network response');
+                    }
+                })
+                .then(function (data) {
+                    console.log("Server Response:", data);
+                    showModal();
+                })
+                
+            });
+        });
+
+
+
+
+    </script>
+
 </head>
 <body>
+    <!-- 모달 -->
+    <div id="cartModal" class="modal" onclick="closeModal(event)">
+        <div class="modal-content" onclick="event.stopPropagation()">
+            <span class="close-button" onclick="closeModal()">&times;</span>
+            <h2>장바구니에 추가되었습니다</h2>
+            <p>상품이 장바구니에 추가되었습니다. 장바구니로 이동하시겠습니까?</p>
+            <button onclick="goToCart()">장바구니로 이동</button>
+            <button onclick="closeModal()">계속 쇼핑</button>
+        </div>
+    </div>
+
+    <!-- 상품 상세 -->
     <div class="product-detail">
         <div class="product-header">
             <img src="${product.prodImageUrl}" alt="${product.prodGoodsName}">
@@ -84,14 +189,15 @@
                 </tr>
             </table>
         </div>
+        
+        
         <!-- 장바구니 -->
-        <form action="/Cart.do" method="post">
-			<input type="hidden" name="productId" value="${product.prodId}"/>
-			<input type="hidden" name="custId" value="2"/>
-			
-			<input type="number" name="cartQuantity" value="0" min="0"/>
-			<input type="hidden" name="action" value="addCart" />
-			<button type="submit" id="cartBtn">장바구니</button>
+        <form id="cartForm" action="Cart.do" method="post">
+		    <input type="hidden" name="productId" value="${product.prodId}" />
+		    <input type="hidden" name="custId" value="2" />
+		    <input type="number" name="cartQuantity" value="1" min="1" />
+		    <input type="hidden" name="action" value="addCart" />
+		    <button type="button" id="cartBtn">장바구니</button>
 		</form>
     </div>
 </body>
