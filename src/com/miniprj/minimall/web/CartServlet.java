@@ -74,7 +74,14 @@ public class CartServlet extends HttpServlet
 			    	 System.out.println("addCart error="+e.getMessage());
 		     }
 			}
-		    response.sendRedirect("/Cart.do?action=list");
+		    //ADDNEW
+		    // 원래 요청한 페이지로 리디렉션
+	        String referer = request.getHeader("Referer");
+	        if (referer != null && !referer.isEmpty()) {
+	            response.sendRedirect(referer);  // 이전 페이지로 리디렉션
+	        } else {
+	            response.sendRedirect("/Cart.do?action=list");  // 기본적으로 장바구니 리스트 페이지로 리디렉션
+	        }
 	     } 
 	     else if ("updateCart".equals(action)) 
 	     {
@@ -87,7 +94,8 @@ public class CartServlet extends HttpServlet
 	    		 cartDao.updateCart(Long.parseLong(cart_id), Integer.parseInt(cart_quantity));
 	    	 }
 	    	 
-		     response.sendRedirect("/Cart.do?action=list");
+	    	 //ADDNEW
+		     //response.sendRedirect("/Cart.do?action=list");
 	     } 
 	     else if ("removeCart".equals(action)) 
 	     {
