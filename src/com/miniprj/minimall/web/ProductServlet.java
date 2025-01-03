@@ -42,10 +42,7 @@ public class ProductServlet extends HttpServlet {
             List<ProductDto> products = dao.searchProducts(searchQuery);
             request.setAttribute("products", products);
             request.getRequestDispatcher("/WEB-INF/views/product/productlist.jsp").forward(request, response);
-        } else if ("detailcategory".equals(action)) {
-        	String prodCategory = request.getParameter("prod_subcategory");
-        	// 상세 카테고리로 상품 불러오기 구현 하고 싶어
-        }
+        } 
     }
 
 

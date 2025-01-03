@@ -161,47 +161,64 @@
     </script>
 </head>
 <body>
-    <h1>장바구니</h1>
 
-    <table>
-        <thead>
-            <tr>
-                <th><input type="checkbox" onclick="toggleAllCheckboxes(this)" /></th>
-                <th>이미지</th>
-                <th>상품 ID</th>
-                <th>상품명</th>
-                <th>가격</th>
-                <th>수량</th>
-                <th>총 가격</th>
-                <th>삭제</th>
-            </tr>
-        </thead>
-        <tbody>
-            <c:forEach var="item" items="${cartList}">
-                <tr>
-                    <td><input type="checkbox" name="cartIds" value="${item.cartId}" class="item-checkbox" /></td>
-                    <td><img src="${item.product.prodImageUrl}" alt="상품 이미지" class="product-image" /></td>
-                    <td>${item.product.prodId}</td>
-                    <td>${item.product.prodModelName}</td>
-                    <td class="product-price">${item.product.prodSalePrice}</td>
-                    <td><input type="number" name="quantities" value="${item.cartCount}" min="0" class="quantity-input" /></td>
-                    <td class="total-price">${item.product.prodSalePrice * item.cartCount}원</td>
-                    <td>
-                        <form method="post" action="/Cart.do">
-                            <input type="hidden" name="cartId" value="${item.cartId}" />
-                            <input type="hidden" name="action" value="removeCart" />
-                            <button type="submit">삭제</button>
-                        </form>
-                    </td>
-                </tr>
-            </c:forEach>
-        </tbody>
-    </table>
-
-    <div id="total-payment">0원</div>
-
-    <div class="button-container">
-        <button>구매하기</button>
-    </div>
+    <!-- 헤더 포함 -->
+    <jsp:include page="/WEB-INF/views/header.jsp" />
+    
+    <main>
+	    <h1>장바구니</h1>
+	
+	    <table>
+	        <thead>
+	            <tr>
+	                <th><input type="checkbox" onclick="toggleAllCheckboxes(this)" /></th>
+	                <th>이미지</th>
+	                <th>상품 ID</th>
+	                <th>상품명</th>
+	                <th>가격</th>
+	                <th>수량</th>
+	                <th>총 가격</th>
+	                <th>삭제</th>
+	            </tr>
+	        </thead>
+	        <tbody>
+	            <c:forEach var="item" items="${cartList}">
+	                <tr>
+	                    <td><input type="checkbox" name="cartIds" value="${item.cartId}" class="item-checkbox" /></td>
+	                    <td><img src="${item.product.prodImageUrl}" alt="상품 이미지" class="product-image" /></td>
+	                    <td>${item.product.prodId}</td>
+	                    <td>${item.product.prodModelName}</td>
+	                    <td class="product-price">${item.product.prodSalePrice}</td>
+	                    <td><input type="number" name="quantities" value="${item.cartCount}" min="0" class="quantity-input" /></td>
+	                    <td class="total-price">${item.product.prodSalePrice * item.cartCount}원</td>
+	                    <td>
+	                        <form method="post" action="/cart/Cart.do">
+	                            <input type="hidden" name="cartId" value="${item.cartId}" />
+	                            <input type="hidden" name="action" value="removeCart" />
+	                            <button type="submit">삭제</button>
+	                        </form>
+	                    </td>
+	                </tr>
+	            </c:forEach>
+	        </tbody>
+	    </table>
+	
+	    <div id="total-payment">0원</div>
+	
+	    <div class="button-container">
+	        <form action="/order/Order.do" method="post">
+	            <input type="hidden" name="action" value="buy">
+	            <c:forEach var="item" items="${cartList}">
+	                <input type="hidden" name="prodId" value="${item.product.prodId}" />
+	                <input type="hidden" name="orderCount" value="${item.cartCount}" />
+	            </c:forEach>
+	            <input type="hidden" name="customerEmail" value="${sessionScope.customer.cust_email}" />
+	            <button type="submit" class="buy-button">구매하기</button>
+	        </form>
+	    </div>
+	</main>
+	
+	<jsp:include page="/WEB-INF/views/footer.jsp" />
+	
 </body>
 </html>

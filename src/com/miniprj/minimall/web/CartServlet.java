@@ -15,13 +15,9 @@ import com.miniprj.minimall.model.CartDto;
 import com.miniprj.minimall.model.CustomerDto;
 
 
-@WebServlet("/Cart.do")
+@WebServlet("/cart/Cart.do")
 public class CartServlet extends HttpServlet 
 {
-	 
-	 public CartServlet() {
-	     super();
-	 }
 
 	 protected void doGet(HttpServletRequest request, HttpServletResponse response) 
 	         throws ServletException, IOException 
@@ -82,7 +78,7 @@ public class CartServlet extends HttpServlet
 			    	 System.out.println("addCart error="+e.getMessage());
 		     }
 			}
-		    response.sendRedirect("/Cart.do?action=list");
+		    response.sendRedirect("/cart/Cart.do?action=list");
 	     } 
 	     else if ("updateCart".equals(action)) 
 	     {
@@ -94,7 +90,7 @@ public class CartServlet extends HttpServlet
 	    		 cartDao.updateCart(cust_email, Integer.parseInt(cart_id),Integer.parseInt(cart_quantity));
 	    	 }
 	    	 
-		     response.sendRedirect("/Cart.do?action=list");
+		     response.sendRedirect("/cart/Cart.do?action=list");
 	     } 
 	     else if ("removeCart".equals(action)) 
 	     {
@@ -109,7 +105,7 @@ public class CartServlet extends HttpServlet
 		    	 System.out.println("removeCart error="+e.getMessage());
 			}
 	 	     
-	 	     response.sendRedirect("/Cart.do?action=list");
+	 	     response.sendRedirect("/cart/Cart.do?action=list");
 	     } 
 
 	 }

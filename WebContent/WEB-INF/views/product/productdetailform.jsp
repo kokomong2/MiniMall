@@ -47,52 +47,69 @@
     </style>
 </head>
 <body>
-    <div class="product-detail">
-        <div class="product-header">
-            <img src="${product.prodImageUrl}" alt="${product.prodGoodsName}">
-            <h1>${product.prodGoodsName}</h1>
-        </div>
-        <div class="product-info">
-            <table>
-                <tr>
-                    <th>Product ID</th>
-                    <td>${product.prodId}</td>
-                </tr>
-                <tr>
-                    <th>Brand</th>
-                    <td>${product.prodBrandName}</td>
-                </tr>
-                <tr>
-                    <th>Price</th>
-                    <td>${product.prodSalePrice} ₩</td>
-                </tr>
-                <tr>
-                    <th>Category</th>
-                    <td>${product.prodMainCategory} / ${product.prodSubcategory}</td>
-                </tr>
-                <tr>
-                    <th>Region</th>
-                    <td>${product.prodRegionName}</td>
-                </tr>
-                <tr>
-                    <th>Weight</th>
-                    <td>${product.prodSaleWeight} ${product.prodWeightUnit}</td>
-                </tr>
-                <tr>
-                    <th>Explanation</th>
-                    <td>${product.prodExplanation}</td>
-                </tr>
-            </table>
-        </div>
-        <!-- 장바구니 -->
-        <form action="/Cart.do" method="post">
-			<input type="hidden" name="productId" value="${product.prodId}"/>
-			<input type="hidden" name="custId" value="2"/>
+
+	<jsp:include page="/WEB-INF/views/header.jsp" />
+	
+	<main>
+	    <div class="product-detail">
+	        <div class="product-header">
+	            <img src="${product.prodImageUrl}" alt="${product.prodGoodsName}">
+	            <h1>${product.prodGoodsName}</h1>
+	        </div>
+	        <div class="product-info">
+	            <table>
+	                <tr>
+	                    <th>Product ID</th>
+	                    <td>${product.prodId}</td>
+	                </tr>
+	                <tr>
+	                    <th>Brand</th>
+	                    <td>${product.prodBrandName}</td>
+	                </tr>
+	                <tr>
+	                    <th>Price</th>
+	                    <td>${product.prodSalePrice} ₩</td>
+	                </tr>
+	                <tr>
+	                    <th>Category</th>
+	                    <td>${product.prodMainCategory} / ${product.prodSubcategory}</td>
+	                </tr>
+	                <tr>
+	                    <th>Region</th>
+	                    <td>${product.prodRegionName}</td>
+	                </tr>
+	                <tr>
+	                    <th>Weight</th>
+	                    <td>${product.prodSaleWeight} ${product.prodWeightUnit}</td>
+	                </tr>
+	                <tr>
+	                    <th>Explanation</th>
+	                    <td>${product.prodExplanation}</td>
+	                </tr>
+	            </table>
+	        </div>
+	        <!-- 장바구니 -->
+	        <form action="/cart/Cart.do" method="post">
+				<input type="hidden" name="productId" value="${product.prodId}"/>
+				<input type="hidden" name="custId" value="2"/>
+				
+				<input type="number" name="cartQuantity" value="0" min="0"/>
+				<input type="hidden" name="action" value="addCart" />
+				<button type="submit" id="cartBtn">장바구니</button>
+			</form>
 			
-			<input type="number" name="cartQuantity" value="0" min="0"/>
-			<input type="hidden" name="action" value="addCart" />
-			<button type="submit" id="cartBtn">장바구니</button>
-		</form>
-    </div>
+			<!-- 구매하기 버튼에서 -->
+			<form action="/order/Order.do" method="post">
+				<input type="hidden" name="action" value="buy"> <input
+					type="hidden" name="prodId" value="${product.prodId}"> <input
+					type="hidden" name="customerEmail"
+					value="${sessionScope.customer.cust_email}">
+				<button type="submit" class="buy-button">구매하기</button>
+			</form>
+	    </div>
+    </main>
+    
+    <jsp:include page="/WEB-INF/views/footer.jsp" />
+    
 </body>
 </html>
