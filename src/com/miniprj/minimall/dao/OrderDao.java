@@ -145,6 +145,7 @@ public class OrderDao {
         return orderList;
     }
     
+    // 내 구매 상세 리스트 
     public List<OrderDto> getOrderDetails(String orderNum) throws SQLException {
         List<OrderDto> detailList = new ArrayList<>();
         Connection con = null;
@@ -156,7 +157,7 @@ public class OrderDao {
             con = dataSource.getConnection();
             System.out.println("DB 연결 성공");
 
-            String sql = "SELECT o.prod_id, p.prod_goods_name, o.order_count, o.order_price, o.order_address " +
+            String sql = "SELECT o.prod_id, p.prod_goods_name, o.order_count, o.order_price, o.order_address, p.prod_image_url " +
                          "FROM orders o " +
                          "JOIN product p ON o.prod_id = p.prod_id " +
                          "WHERE o.order_num = ?";
@@ -177,6 +178,7 @@ public class OrderDao {
                 orderDetail.setOrderAddress(rs.getString("order_address"));
 
                 // ProductDto 설정
+                productDetail.setProdImageUrl(rs.getNString("prod_image_url"));
                 productDetail.setProdGoodsName(rs.getString("prod_goods_name"));
                 orderDetail.setProduct(productDetail);
 

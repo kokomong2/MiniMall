@@ -25,6 +25,10 @@
     tr:hover {
         background-color: #f1f1f1;
     }
+    img {
+    	height: 100px;
+    	width: 100px;
+    }
 </style>
 </head>
 <body>
@@ -39,6 +43,7 @@
                     <thead>
                         <tr>
                             <th>상품 ID</th>
+                            <th>상품 이미지</th>
                             <th>상품명</th>
                             <th>수량</th>
                             <th>가격</th>
@@ -49,6 +54,11 @@
 						<c:forEach var="detail" items="${detailList}">
 						    <tr>
 						        <td>${detail.prodId}</td>
+								<td>
+							        <a href="/product/Product.do?action=detailform&prod_id=${detail.prodId}">
+						                <img src="${detail.product.prodImageUrl}" alt="Product Image">
+						            </a>								
+								</td>
 						        <td>${detail.product.prodGoodsName}</td>
 						        <td>${detail.orderCount}</td>
 						        <td>${detail.orderPrice}</td>
