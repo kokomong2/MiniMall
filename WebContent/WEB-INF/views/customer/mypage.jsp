@@ -84,11 +84,11 @@
                 <img src="https://via.placeholder.com/50" alt="내 정보 수정">
                 <span>내 정보 수정</span>
             </a>
-            <a href="#" class="mypage-item">
+            <a href="/cart/Cart.do?action=list" class="mypage-item">
                 <img src="https://via.placeholder.com/50" alt="장바구니">
                 <span>장바구니 <span class="count">(5)</span></span>
             </a>
-            <a href="#" class="mypage-item">
+            <a href="/order/Order.do?action=myorderlist" class="mypage-item">
                 <img src="https://via.placeholder.com/50" alt="구매 내역">
                 <span>구매 내역 <span class="count">(2)</span></span>
             </a>
