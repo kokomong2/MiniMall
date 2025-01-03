@@ -25,28 +25,33 @@ h1 {
 	margin-bottom: 30px;
 }
 
+/*TABLE*/
 table {
 	width: 100%;
 	border-collapse: collapse;
 	margin-bottom: 20px;
-	background-color: #fff;
-	box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+	background-color: transparent; 
+	box-shadow: none;
+	border-collapse: separate;
+	border-spacing: 0 10px;/* 셀 간 간격 */
+	
 }
 
-th, td {
-	border: 1px solid #ddd;
-	padding: 12px;
+td {
+	border: none;
+	padding: 23px;
 	text-align: center;
 }
 
-th {
-	background-color: #f4f4f4;
-	font-weight: bold;
+.cart_bgr {
+    background-color: #fff; /* 배경색 white */
+    padding: 20px; /* 내부 여백 */
+    margin-bottom: 20px; /* 항목 간 간격 */
+    border-radius: 10px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
-tr:nth-child(even) {
-	background-color: #f9f9f9;
-}
+/*CHECK BOX*/
 
 input[type="number"] {
 	width: 60px;
@@ -94,6 +99,21 @@ button:hover {
 	height: 50px;
 	object-fit: cover;
 	border-radius: 4px;
+}
+
+/*and so on*/
+#wrapper
+{
+    margin: 0 auto;
+    display: block;
+    width: 800px;
+}
+#carttitle{
+	margin-top:60px;
+	margin-bottom:20px;
+	display: flex;
+	justify-content: center; /* 가로 중앙 */
+	align-items: center;
 }
 </style>
 <script>
@@ -215,24 +235,17 @@ button:hover {
 	<jsp:include page="/WEB-INF/views/header.jsp" />
 
 	<main>
-		<h1>장바구니</h1>
+	
+		<div id="carttitle">
+	   		<h2 style="font-weight:bold;">장바구니</h2>
+	   	</div>
 
+		<div id="wrapper">
 		<table>
-			<thead>
-				<tr>
-					<th><input type="checkbox" onclick="toggleAllCheckboxes(this)" /></th>
-					<th>이미지</th>
-					<th>상품 ID</th>
-					<th>상품명</th>
-					<th>가격</th>
-					<th>수량</th>
-					<th>총 가격</th>
-					<th>삭제</th>
-				</tr>
-			</thead>
+			
 			<tbody>
 				<c:forEach var="item" items="${cartList}">
-					<tr>
+					<tr class="cart_bgr">
 						<td><input type="checkbox" name="cartIds"
 							value="${item.cartId}" class="item-checkbox" /></td>
 						<td><img src="${item.product.prodImageUrl}" alt="상품 이미지"
@@ -273,6 +286,7 @@ button:hover {
 					onclick="submitCheckedItems()">구매하기</button>
 			</form>
 		</div>
+	</div>
 	</main>
 
 	<jsp:include page="/WEB-INF/views/footer.jsp" />

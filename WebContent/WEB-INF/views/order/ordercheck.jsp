@@ -71,14 +71,11 @@ th, td {
 }
 
 th {
-	background-color: #007bff;
+	background-color: #2e4631;
 	color: white;
 	font-weight: bold;
 }
 
-tr:nth-child(even) {
-	background-color: #f9f9f9;
-}
 
 .order-summary {
 	background-color: #f4f7fa;
@@ -97,7 +94,7 @@ tr:nth-child(even) {
 }
 
 .order-card button {
-	background-color: #28a745;
+	background-color: #74B07B;
 	color: white;
 	border: none;
 	padding: 12px 25px;
@@ -109,13 +106,13 @@ tr:nth-child(even) {
 }
 
 .order-card button:hover {
-	background-color: #218838;
+	background-color: #2e4631;
 }
 
 .message {
 	font-size: 18px;
 	font-weight: 500;
-	color: #28a745;
+	color: #2e4631;
 	margin-top: 15px;
 }
 </style>

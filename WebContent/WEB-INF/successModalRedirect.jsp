@@ -1,16 +1,19 @@
 <%@ page contentType="text/html; charset=UTF-8" %>
 <style>
     .modal {
+       all: unset;
         display: none;
         position: fixed;
-        z-index: 1;
+        z-index: 1000;
         left: 0;
         top: 0;
         width: 100%;
         height: 100%;
         background-color: rgba(0, 0, 0, 0.4);
     }
+    
     .modal-content {
+       all: unset;
         background-color: #fefefe;
         padding: 20px;
         width: 80%;
@@ -22,6 +25,7 @@
         transform: translate(-50%, -50%);
         border-radius: 8px; 
     }
+    
     .close {
         color: #aaa;
         font-size: 28px;
@@ -31,20 +35,30 @@
         top: 15px;
         right: 20px;
     }
+    
     .modal-img {
-    	width: 70px;
-    	height: 70px;
-    	margin-top: 10px;
+       width: 70px;
+       height: 70px;
+       margin-top: 10px;
     }
+    
+   .modal-content h3 {
+       font-size: 19.5px; 
+       font-weight: bold; 
+       text-align: center; 
+       margin-top: 22px;
+       margin-bottom: 18px;
+   }
+
     .ok-btn {
-    	background-color: #13a270;
-    	border: 1px solid #13a270;
-    	border-radius: 4px;
-    	color: #fff;
-    	width: 100%;
-    	padding: 0.5rem;
-    	margin-top: 10px;
-    	font-size: 0.9rem;
+       background-color: #13a270;
+       border: 1px solid #13a270;
+       border-radius: 4px;
+       color: #fff;
+       width: 100%;
+       padding: 0.5rem;
+       margin-top: 10px;
+       font-size: 0.9rem;
     }
 
 </style>
@@ -68,7 +82,7 @@
         modal.style.display = "block";
 
         redirectLoginBtn.onclick = function() {
-        	var redirectUrl = '${param.redirectUrl}';  
+           var redirectUrl = '${param.redirectUrl}';  
             window.location.href = redirectUrl;
         };
 
@@ -88,4 +102,4 @@
             showSuccessModal();
         } 
     });
-</script>ml>
+</script>

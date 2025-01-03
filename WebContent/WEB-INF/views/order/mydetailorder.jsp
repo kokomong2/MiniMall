@@ -42,9 +42,16 @@
     <jsp:include page="/WEB-INF/views/header.jsp" />
     <main>
         <div id="wrapper">
-            <h1>주문 상세 내역</h1>
-            <p style="color:#6E6E6E">주문 번호: ${orderNum}</p>
-            <p style="color:#6E6E6E">배송지: ${orderAddress}</p>
+			<div style=
+				"margin-top:60px;
+				margin-bottom:20px;
+				display: flex;
+	    		justify-content: center; /* 가로 중앙 */
+	    		align-items: center;">
+	    		<h3 style="test-align:center; font-weight:bold;">주문 상세 내역</h3>
+	    	</div>
+            <p style="color:#6E6E6E">주문 번호 | ${orderNum}</p>
+            <p style="color:#6E6E6E">배송지  | ${orderAddress}</p>
             <br>
             <div style="font-size:20px; font-weight: bold;">주문 상품</div>
             <c:choose>

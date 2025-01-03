@@ -61,7 +61,14 @@
 	<main>
 		
 		<div id="wrapper">
-		<h1>구매 내역</h1>
+		<div style="margin-top:60px;
+			margin-bottom:20px;
+			display: flex;
+    		justify-content: center; /* 가로 중앙 */
+    		align-items: center;">
+    		<h3 style="test-align:center; font-weight:bold;">구매 내역</h3>
+    	</div>
+		
 			<c:choose>
 			    <c:when test="${not empty orderList}">
 			        <table>

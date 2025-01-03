@@ -4,14 +4,14 @@
 <html lang="ko">
 <head>
 <meta charset="UTF-8">
-<script
-	src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
-<link
-	href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css"
-	rel="stylesheet">
 <title>정보 수정</title>
 <!-- Daum API 스크립트 -->
 <script src="//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
+<script
+   src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+<link
+   href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css"
+   rel="stylesheet">
 <script>
         let originalValues = {};
 
@@ -88,8 +88,8 @@
         }
 </script>
 <style>
-	body {
-		font-family: 'Arial', sans-serif;
+   body {
+      font-family: 'Arial', sans-serif;
         margin: 0;
         display: flex;
         flex-direction: column;
@@ -102,25 +102,27 @@
         padding: 1rem;
     }
 
-	main {
-		display: flex;
+   main {
+      display: flex;
         justify-content: center;
         align-items: center;
     }
     
     .container {
-    	width: 100%; 
-    	max-width: 600px;  
-	}
+       width: 100%; 
+       max-width: 620px;  
+   }
     
     .field {
-    	margin-bottom: 10px;
+       margin-bottom: 10px;
     }
     
     .edit-container {
         background-color: white;
         padding: 20px;
-        border-radius: 8px;
+        border-radius: 12px;
+         box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); 
+         transition: box-shadow 0.3s ease;
     }
 
     h1 {
@@ -130,7 +132,7 @@
         text-align: center;
     }
 
-	.label {
+   .label {
         display: block;
         font-size: 0.85rem;
         margin-bottom: 0.5rem;
@@ -163,13 +165,13 @@
     }
     
     .postcode-field button {
-    	width: 22%; 
+       width: 22%; 
         height: 37px;
         background-color: #2e4631; 
-    	color: #fff; 
-    	border: none;
-    	border-radius: 4px;
-    	cursor: pointer;
+       color: #fff; 
+       border: none;
+       border-radius: 4px;
+       cursor: pointer;
     }
     
     .button-container {
@@ -192,7 +194,7 @@
     }
     
     .button-group {
-    	display: flex;
+       display: flex;
         justify-content: space-between;
         margin-top: 30px;
     }
@@ -233,32 +235,33 @@
 
 <main>
 <div class="container">
+   <br><br>
     <div class="edit-container">
-    	<h1>정보 수정</h1>
-    	<form action="/customer/Customer.do?action=mypageEdit" method="post" onsubmit="validateForm(event)" class="edit-form">
+       <h1>정보 수정</h1>
+       <form action="/customer/Customer.do?action=mypageEdit" method="post" onsubmit="validateForm(event)" class="edit-form">
         <%
-        	// 세션에서 사용자 정보를 가져옴
+           // 세션에서 사용자 정보를 가져옴
             CustomerDto customer = (CustomerDto) session.getAttribute("customer");
             if (customer != null) {
         %>
         <div class="field">
-    		<label class="label" for="cust_name">이름</label>
-    		<input type="text" id="cust_name" value="<%= customer.getCust_name() %>" disabled>
-		</div>
-		<div class="field">
-    		<label class="label" for="cust_email">이메일</label>
-    		<input type="text" id="cust_email" value="<%= customer.getCust_email() %>" disabled>
-		</div>
-		<div class="field">
+          <label class="label" for="cust_name">이름</label>
+          <input type="text" id="cust_name" value="<%= customer.getCust_name() %>" disabled>
+      </div>
+      <div class="field">
+          <label class="label" for="cust_email">이메일</label>
+          <input type="text" id="cust_email" value="<%= customer.getCust_email() %>" disabled>
+      </div>
+      <div class="field">
             <label class="label" for="cust_phone_num">연락처</label>
             <input type="text" id="cust_phone_num" name="cust_phone_num" value="<%= customer.getCust_phone_num() %>" disabled>
         </div>
         <div class="field">
             <label class="label" for="sample6_postcode">우편번호</label>
             <div class="postcode-field">
-            	<input type="text" id="sample6_postcode" name="cust_postcode" size="50" value="<%= customer.getCust_postcode() %>" disabled>
-            	<button type="button" id="postcodeBtn" onclick="sample6_execDaumPostcode()" style="display: none;">우편번호 찾기</button>
-        	</div>
+               <input type="text" id="sample6_postcode" name="cust_postcode" size="50" value="<%= customer.getCust_postcode() %>" disabled>
+               <button type="button" id="postcodeBtn" onclick="sample6_execDaumPostcode()" style="display: none;">우편번호 찾기</button>
+           </div>
         </div>
         <div class="field">
             <label class="label" for="sample6_address">주소</label>
@@ -270,22 +273,23 @@
         </div>
         
         <div class="button-container">
-        	<button type="button" id="editBtn" onclick="enableEditing()">수정</button>
-        	<div class="button-group">
-            	<button type="submit" id="saveBtn" style="display: none;">저장</button>
-            	<button type="button" id="backBtn" onclick="cancelEditing()" style="display: none;">취소</button>
-        	</div>
+           <button type="button" id="editBtn" onclick="enableEditing()">수정</button>
+           <div class="button-group">
+               <button type="submit" id="saveBtn" style="display: none;">저장</button>
+               <button type="button" id="backBtn" onclick="cancelEditing()" style="display: none;">취소</button>
+           </div>
         </div>
         
         <%
             }
         %>
         </form>   
-  	</div>
+     </div><br><br><br>
+     </main>
 </div>
-</main>
+
 
 <jsp:include page="/WEB-INF/views/footer.jsp" />
-<jsp:include page="/WEB-INF/successModalForward.jsp" />
+<jsp:include page="/WEB-INF/successModalRedirect.jsp" />
 </body>
 </html>
