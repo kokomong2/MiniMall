@@ -107,7 +107,7 @@ public class AuthServlet extends HttpServlet {
 		 request.setAttribute("message", "로그인 페이지로 이동합니다.");
 		 request.setAttribute("functionSuccess",  true);
 		 request.setAttribute("redirectUrl", "http://localhost:8080/auth/Auth.do?action=loginform");
-		 RequestDispatcher dispatcher = request.getRequestDispatcher("/WEB-INF/successModal.jsp");
+		 RequestDispatcher dispatcher = request.getRequestDispatcher("/WEB-INF/successModalForward.jsp");
 		 dispatcher.forward(request, response);
       }catch(Exception e) {
             request.setAttribute("errorMessage", "회원가입 중 오류가 발생했습니다: " + e.getMessage());
@@ -151,7 +151,7 @@ public class AuthServlet extends HttpServlet {
     		  request.setAttribute("message",  "이메일 또는 비밀번호를 확인해주세요.");
     		  request.setAttribute("functionFail",  true);
     		  request.setAttribute("redirectUrl", "http://localhost:8080/auth/Auth.do?action=loginform");
-    		  RequestDispatcher dispatcher = request.getRequestDispatcher("/WEB-INF/failModal.jsp");
+    		  RequestDispatcher dispatcher = request.getRequestDispatcher("/WEB-INF/failModalForward.jsp");
     		  dispatcher.forward(request, response);
     	  }
       } catch(Exception e) {

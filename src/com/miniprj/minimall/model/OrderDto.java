@@ -10,7 +10,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 public class OrderDto {
-    private int orderId;            // 주문 ID
+	private int orderId;            // 주문 ID
     private int orderCount;         // 주문 수량
     private int custId;             // 고객 ID
     private int prodId;             // 상품 ID

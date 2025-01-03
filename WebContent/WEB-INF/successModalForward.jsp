@@ -53,8 +53,8 @@
     <div class="modal-content">
         <span class="close">&times;</span>
         <img src="/img/success.png" alt="성공 이미지" class="modal-img">
-        <h3>${title}</h3>
-        <p>${message}</p>
+        <h3>${param.title}</h3>
+        <p>${param.message}</p>
         <button id="redirectLogin" class="ok-btn">확인</button>
     </div>
 </div>
@@ -68,7 +68,7 @@
         modal.style.display = "block";
 
         redirectLoginBtn.onclick = function() {
-        	var redirectUrl = '${redirectUrl}';  
+        	var redirectUrl = '${param.redirectUrl}';  
             window.location.href = redirectUrl;
         };
 
@@ -84,7 +84,7 @@
     }
 
     document.addEventListener('DOMContentLoaded', function() {
-        if ('${functionSuccess}' == 'true') {
+        if ('${param.functionSuccess}' == 'true') {
             showSuccessModal();
         } 
     });

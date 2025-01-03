@@ -37,8 +37,8 @@
     	margin-top: 10px;
     }
     .ok-btn {
-    	background-color: #ffa500;
-    	border: 1px solid #ffa500;
+    	background-color: #13a270;
+    	border: 1px solid #13a270;
     	border-radius: 4px;
     	color: #fff;
     	width: 100%;
@@ -46,29 +46,29 @@
     	margin-top: 10px;
     	font-size: 0.9rem;
     }
+
 </style>
 
-<div id="failModal" class="modal">
+<div id="successModal" class="modal">
     <div class="modal-content">
         <span class="close">&times;</span>
-        <img src="/img/fail.png" alt="실패 이미지" class="modal-img">
-        <h3>${title}</h3><br>
-        <p>${message}</p>
+        <img src="/img/success.png" alt="성공 이미지" class="modal-img">
+        <h3>${param.title}</h3>
+        <p>${param.message}</p>
         <button id="redirectLogin" class="ok-btn">확인</button>
     </div>
-    
 </div>
 
 <script>
-    function showFailModal() {
-        var modal = document.getElementById("failModal");
+    function showSuccessModal() {
+        var modal = document.getElementById("successModal");
         var closeBtn = document.getElementsByClassName("close")[0];
         var redirectLoginBtn = document.getElementById("redirectLogin");
 
         modal.style.display = "block";
 
         redirectLoginBtn.onclick = function() {
-        	var redirectUrl = '${redirectUrl}';  
+        	var redirectUrl = '${param.redirectUrl}';  
             window.location.href = redirectUrl;
         };
 
@@ -84,8 +84,8 @@
     }
 
     document.addEventListener('DOMContentLoaded', function() {
-        if ('${functionFail}' == 'true') {
-            showFailModal();
+        if ('${param.functionSuccess}' == 'true') {
+            showSuccessModal();
         } 
     });
 </script>

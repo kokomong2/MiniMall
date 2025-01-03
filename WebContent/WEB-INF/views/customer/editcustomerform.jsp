@@ -3,17 +3,19 @@
 <!DOCTYPE html>
 <html lang="ko">
 <head>
-    <meta charset="UTF-8">
-    <title>정보 수정</title>
-    <!-- Daum API 스크립트 -->
-    <script src="//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
-    <script>
+<meta charset="UTF-8">
+<title>정보 수정</title>
+<!-- Daum API 스크립트 -->
+<script src="//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
+<script>
         let originalValues = {};
 
         function enableEditing() {
             document.querySelectorAll('.field input').forEach(input => {
                 originalValues[input.id] = input.value;
-                input.disabled = false;
+                if (input.id !== 'cust_name' && input.id !== 'cust_email') {
+                    input.disabled = false;
+                }
             });
             document.getElementById('saveBtn').style.display = 'inline';
             document.getElementById('editBtn').style.display = 'none';
@@ -79,170 +81,206 @@
                 }
             }).open();
         }
-    </script>
-    <style>
-        body {
-            font-family: 'Arial', sans-serif;
-            background-color: #f9f9f9;
-            margin: 0;
-            padding-top: 4rem; /* 헤더 높이 */
-            padding-bottom: 4rem; /* 푸터 높이 */
-        }
+</script>
+<style>
+	body {
+		font-family: 'Arial', sans-serif;
+        margin: 0;
+        display: flex;
+        flex-direction: column;
+    }
 
-        h1 {
-            text-align: center;
-            margin: 2rem 0;
-            font-size: 1.8rem;
-            color: #333;
-        }
+    header, footer {
+        flex-shrink: 0;
+        color: white;
+        text-align: center;
+        padding: 1rem;
+    }
 
-        table {
-            width: 70%;
-            margin: 0 auto;
-            border-collapse: separate;
-            border-spacing: 0 10px;
-        }
+	main {
+		display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+    
+    .container {
+    	width: 100%; 
+    	max-width: 600px;  
+	}
+    
+    .field {
+    	margin-bottom: 10px;
+    }
+    
+    .edit-container {
+        background-color: white;
+        padding: 20px;
+        border-radius: 8px;
+    }
 
-        td {
-            padding: 10px;
-            vertical-align: middle;
-        }
+    h1 {
+        font-size: 1.8rem;
+        margin-bottom: 20px;
+        color: #333;
+        text-align: center;
+    }
 
-        .label {
-            text-align: right;
-            font-weight: bold;
-            width: 25%;
-            color: #333;
-        }
+	.label {
+        display: block;
+        font-size: 0.85rem;
+        margin-bottom: 0.5rem;
+        color: #666;
+    }
+    
+    .edit-form input[type="text"],
+    .edit-form input[type="password"] {
+        width: 100%;
+        padding: 10px;
+        border: 1px solid #ddd;
+        border-radius: 4px;
+        box-sizing: border-box;
+        font-size: 14px;
+    }
 
-        .field input {
-            width: 100%;
-            padding: 10px;
-            border: 1px solid #ddd;
-            border-radius: 4px;
-            background-color: #f9f9f9;
-            font-size: 0.95rem;
-        }
+    .field input:disabled {
+        background-color: #f0f0f0;
+        color: #666;
+    }
+    
+    .postcode-field{
+        display: flex;
+        align-items: center;
+    }
+    
+    .postcode-field input[type="text"]:not([disabled]) {
+        width: 78%; 
+        margin-right: 10px; 
+    }
+    
+    .postcode-field button {
+    	width: 22%; 
+        height: 37px;
+        background-color: #2e4631; 
+    	color: #fff; 
+    	border: none;
+    	border-radius: 4px;
+    	cursor: pointer;
+    }
+    
+    .button-container {
+        margin-top: 30px;
+    }
+    
+    #editBtn {
+        color: #fff;
+        background-color: #2e4631;
+        margin-right: 10px;
+        width: 100%;
+        padding: 0.8rem;
+        font-size: 1rem;
+        border-radius: 4px;
+        cursor: pointer;
+    }
 
-        .field input:disabled {
-            background-color: #f0f0f0;
-            color: #666;
-        }
+    #editBtn:hover {
+        background-color: #243626;
+    }
+    
+    .button-group {
+    	display: flex;
+        justify-content: space-between;
+        margin-top: 30px;
+    }
+    
+    #saveBtn, #backBtn {
+        width: 100%;
+        padding: 0.8rem;
+        font-size: 1rem;
+        border-radius: 4px;
+        cursor: pointer;
+    }
 
-        .button-group {
-            text-align: center;
-            margin-top: 20px;
-        }
+    #saveBtn {
+        color: #fff;
+        background-color: #2e4631;
+        border: none;
+        margin-right: 10px;
+    }
 
-        .button-group button {
-            padding: 10px 20px;
-            font-size: 1rem;
-            margin: 5px;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
-        }
+    #saveBtn:hover {
+        background-color: #243626;
+    }
 
-        #editBtn {
-            background-color: #007bff;
-            color: #fff;
-        }
+    #backBtn {
+        background-color: #fff;
+        border: 1px solid #2e4631;
+        color: #2e4631;
+    }
 
-        #editBtn:hover {
-            background-color: #0056b3;
-        }
-
-        #saveBtn {
-            background-color: #28a745;
-            color: #fff;
-        }
-
-        #saveBtn:hover {
-            background-color: #218838;
-        }
-
-        #backBtn {
-            background-color: #dc3545;
-            color: #fff;
-        }
-
-        #backBtn:hover {
-            background-color: #c82333;
-        }
-
-        #postcodeBtn {
-            background-color: #6c757d;
-            color: #fff;
-        }
-
-        #postcodeBtn:hover {
-            background-color: #5a6268;
-        }
+    #backBtn:hover {
+        background-color: #f3f3f3;
+    }
     </style>
 </head>
 <body>
 
-    <!-- 헤더 포함 -->
-    <jsp:include page="/WEB-INF/views/header.jsp" />
+<jsp:include page="/WEB-INF/views/header.jsp" />
 
-    <main>
-        <form action="/customer/Customer.do?action=mypageEdit" method="post" onsubmit="validateForm(event)">
-            <%
-                // 세션에서 사용자 정보를 가져옴
-                CustomerDto customer = (CustomerDto) session.getAttribute("customer");
-                if (customer != null) {
-            %>
-            <h1>정보 수정</h1>
-            <table>
-                <tr>
-                    <td class="label">이름</td>
-                    <td><%= customer.getCust_name() %></td>
-                </tr>
-                <tr>
-                    <td class="label">이메일</td>
-                    <td><%= customer.getCust_email() %></td>
-                </tr>
-				<tr>
-				    <td class="label">연락처</td>
-				    <td class="field">
-				        <input type="text" id="cust_phone_num" name="cust_phone_num" value="<%= customer.getCust_phone_num() %>" disabled>
-				    </td>
-				</tr>
-                <tr>
-                    <td class="label">우편번호</td>
-                    <td class="field">
-                        <input type="text" id="sample6_postcode" name="cust_postcode" value="<%= customer.getCust_postcode() %>" disabled>
-                    </td>
-                    <td>
-                        <button type="button" id="postcodeBtn" onclick="sample6_execDaumPostcode()" style="display: none;">우편번호 찾기</button>
-                    </td>
-                </tr>
-                <tr>
-                    <td class="label">주소</td>
-                    <td class="field" colspan="2">
-                        <input type="text" id="sample6_address" name="cust_address" value="<%= customer.getCust_address() %>" disabled>
-                    </td>
-                </tr>
-                <tr>
-                    <td class="label">상세주소</td>
-                    <td class="field" colspan="2">
-                        <input type="text" id="sample6_detailAddress" name="cust_detail_address" value="<%= customer.getCust_detail_address() %>" disabled>
-                    </td>
-                </tr>
-            </table>
-            <div class="button-group">
-                <button type="button" id="editBtn" onclick="enableEditing()">수정</button>
-                <button type="submit" id="saveBtn" style="display: none;">저장</button>
-                <button type="button" id="backBtn" onclick="cancelEditing()" style="display: none;">취소</button>
-            </div>
-            <%
-                }
-            %>
-        </form>
-    </main>
+<main>
+<div class="container">
+    <div class="edit-container">
+    	<h1>정보 수정</h1>
+    	<form action="/customer/Customer.do?action=mypageEdit" method="post" onsubmit="validateForm(event)" class="edit-form">
+        <%
+        	// 세션에서 사용자 정보를 가져옴
+            CustomerDto customer = (CustomerDto) session.getAttribute("customer");
+            if (customer != null) {
+        %>
+        <div class="field">
+    		<label class="label" for="cust_name">이름</label>
+    		<input type="text" id="cust_name" value="<%= customer.getCust_name() %>" disabled>
+		</div>
+		<div class="field">
+    		<label class="label" for="cust_email">이메일</label>
+    		<input type="text" id="cust_email" value="<%= customer.getCust_email() %>" disabled>
+		</div>
+		<div class="field">
+            <label class="label" for="cust_phone_num">연락처</label>
+            <input type="text" id="cust_phone_num" name="cust_phone_num" value="<%= customer.getCust_phone_num() %>" disabled>
+        </div>
+        <div class="field">
+            <label class="label" for="sample6_postcode">우편번호</label>
+            <div class="postcode-field">
+            	<input type="text" id="sample6_postcode" name="cust_postcode" size="50" value="<%= customer.getCust_postcode() %>" disabled>
+            	<button type="button" id="postcodeBtn" onclick="sample6_execDaumPostcode()" style="display: none;">우편번호 찾기</button>
+        	</div>
+        </div>
+        <div class="field">
+            <label class="label" for="sample6_address">주소</label>
+            <input type="text" id="sample6_address" name="cust_address" size="50" value="<%= customer.getCust_address() %>" disabled>
+        </div>
+        <div class="field">
+            <label class="label" for="sample6_detailAddress">상세주소</label>
+            <input type="text" id="sample6_detailAddress" name="cust_detail_address" value="<%= customer.getCust_detail_address() %>" disabled>
+        </div>
+        
+        <div class="button-container">
+        	<button type="button" id="editBtn" onclick="enableEditing()">수정</button>
+        	<div class="button-group">
+            	<button type="submit" id="saveBtn" style="display: none;">저장</button>
+            	<button type="button" id="backBtn" onclick="cancelEditing()" style="display: none;">취소</button>
+        	</div>
+        </div>
+        
+        <%
+            }
+        %>
+        </form>   
+  	</div>
+</div>
+</main>
 
-    <!-- 푸터 포함 -->
-    <jsp:include page="/WEB-INF/views/footer.jsp" />
-    
+<jsp:include page="/WEB-INF/views/footer.jsp" />
+<jsp:include page="/WEB-INF/successModalForward.jsp" />
 </body>
 </html>

@@ -31,18 +31,42 @@ public class ProductServlet extends HttpServlet {
             ProductDto product = dao.getProductDetail(prodId);
             request.setAttribute("product", product);
             request.getRequestDispatcher("/WEB-INF/views/product/productdetailform.jsp").forward(request, response);
-        } else if ("category".equals(action)) {
-            String prodCategory = request.getParameter("prod_category");
-            List<ProductDto> products = dao.listByCategory(prodCategory);
-            request.setAttribute("products", products);
-            request.setAttribute("selectedCategory", prodCategory);
-            request.getRequestDispatcher("/WEB-INF/views/product/productlist.jsp").forward(request, response);
-        } else if ("search".equals(action)) {
-            String searchQuery = request.getParameter("search_query");
-            List<ProductDto> products = dao.searchProducts(searchQuery);
-            request.setAttribute("products", products);
-            request.getRequestDispatcher("/WEB-INF/views/product/productlist.jsp").forward(request, response);
-        } 
+        }else if ("category".equals(action)) {
+			String mainCategory = request.getParameter("prod_main_category");
+			String subCategory = request.getParameter("prod_sub_category");
+
+			List<ProductDto> products = dao.listByCategory(mainCategory, subCategory);
+
+			List<String> subCategories = null;
+			if (mainCategory != null && !mainCategory.isEmpty() && !"기타".equals(mainCategory)) {
+				subCategories = dao.getSubCategories(mainCategory);
+			}
+
+			request.setAttribute("products", products);
+			request.setAttribute("selectedMainCategory", mainCategory);
+			request.setAttribute("selectedSubCategory", subCategory);
+			request.setAttribute("subCategories", subCategories);
+			request.getRequestDispatcher("/WEB-INF/views/product/productlist.jsp").forward(request, response);
+		} else if ("search".equals(action)) {
+			String searchQuery = request.getParameter("search_query");
+			List<ProductDto> products = dao.searchProducts(searchQuery);
+			request.setAttribute("products", products);
+			request.getRequestDispatcher("/WEB-INF/views/product/productlist.jsp").forward(request, response);
+		} else if ("getSubCategories".equals(action)) {
+			String mainCategory = request.getParameter("main_category");
+			List<String> subCategories = dao.getSubCategories(mainCategory);
+
+			response.setContentType("application/json; charset=UTF-8");
+			StringBuilder json = new StringBuilder("[");
+			for (int i = 0; i < subCategories.size(); i++) {
+				json.append("\"").append(subCategories.get(i)).append("\"");
+				if (i < subCategories.size() - 1) {
+					json.append(",");
+				}
+			}
+			json.append("]");
+			response.getWriter().write(json.toString());
+		}
     }
 
 

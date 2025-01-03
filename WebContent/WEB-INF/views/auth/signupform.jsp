@@ -12,13 +12,29 @@
 <script src="/js/validateForm.js"></script>
 <style>
 	body {
-        font-family: 'Arial', sans-serif;
+		font-family: 'Arial', sans-serif;
+        margin: 0;
         display: flex;
+        flex-direction: column;
+    }
+
+    header, footer {
+        flex-shrink: 0;
+        color: white;
+        text-align: center;
+        padding: 1rem;
+    }
+
+	main {
+		display: flex;
         justify-content: center;
         align-items: center;
-        height: 100vh;
-        margin: 0;
     }
+    
+    .container {
+    	width: 100%; 
+    	max-width: 620px; 
+	}
     
     .field {
     	margin-bottom: 10px;
@@ -73,8 +89,8 @@
     	cursor: pointer;
     }
     
-    .postcode-field button {
-        width: 20%; 
+    .email-field button {
+        width: 16%; 
     }
     
     .postcode-field button {
@@ -89,8 +105,6 @@
         width: 78%; 
         margin-right: 10px; 
     }
-    
-    
     
     .button-container {
         display: flex;
@@ -139,8 +153,10 @@
 
 </head>
 <body>
+<jsp:include page="/WEB-INF/views/header.jsp" />
+
+<main>
 <div class="container">
-	<jsp:include page="/WEB-INF/views/header.jsp" />
     <div class="signup-container">
 		<h1>회원가입</h1>
 		<form action="/auth/Auth.do?action=signup" method="post" class="signup-form">
@@ -169,6 +185,7 @@
                 <input type="text" id="cust_phone_num" name="cust_phone_num" placeholder="-을 포함하여 연락처를 입력해주세요" value="${member.cust_phone_num}">
             </div>
             <div class="field">
+            <div class="field">
                 <label class="label" for="sample6_postcode">우편번호</label>
                 <div class="postcode-field">
                 	<input type="text" id="sample6_postcode" name="cust_postcode" size="50" placeholder="우편번호를 입력해주세요">
@@ -195,8 +212,10 @@
 		</form>
 	</div>
 </div>
-	<jsp:include page="/WEB-INF/successModal.jsp" />
-	<jsp:include page="/WEB-INF/views/footer.jsp" />
+</main>
+
+<jsp:include page="/WEB-INF/successModalForward.jsp" />
+<jsp:include page="/WEB-INF/views/footer.jsp" />
 </div>
 </body>
 </html>

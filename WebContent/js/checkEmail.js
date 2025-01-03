@@ -9,17 +9,13 @@ function checkEmail() {
         if (xhr.readyState === 4 && xhr.status === 200) {
             var response = JSON.parse(xhr.responseText);
             if (response.emailUsed) {
-            	var modal = document.getElementById("failModal");
                 resultSpan.innerText = "이미 존재하는 이메일입니다.";
                 resultSpan.style.color = "red";
                 emailInput.value = "";
-                showFailModal(response.title, response.message, response.redirectUrl);
             } else {
-            	var modal = document.getElementById("successModal");
                 resultSpan.innerText = "사용 가능한 이메일입니다.";
                 resultSpan.style.color = "green";
                 response.title = "sdf";
-                showSuccessModal(response.title, response.message, response.redirectUrl); 
             }
         }
     };
