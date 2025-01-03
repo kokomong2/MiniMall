@@ -1,72 +1,38 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
-<style>
-    .category-container {
-        display: flex; /* 가로 정렬 */
-        justify-content: space-around; /* 아이템 간격 균등 */
-        align-items: center; /* 수직 가운데 정렬 */
-        margin-bottom: 2rem;
-    }
-
-    .category-item {
-        text-align: center;
-        padding: 1rem;
-        background-color: #fff;
-        border: 1px solid #ddd;
-        border-radius: 8px;
-        transition: transform 0.3s, background-color 0.3s;
-        width: 120px; /* 각 아이템의 고정 너비 */
-        cursor: pointer;
-    }
-
-    .category-item img {
-        width: 50px;
-        height: 50px;
-        margin-bottom: 0.5rem;
-    }
-
-    .category-item:hover {
-        transform: translateY(-5px);
-        background-color: #f1f1f1;
-    }
-
-    .category-item span {
-        font-size: 1rem;
-        color: #333;
-    }
-</style>
+    <link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/css/topcategory.css">
 
 
 <div class="category-container">
     <div class="category-item" onclick="location.href='/product/Product.do?action=list'">
-        <img src="https://via.placeholder.com/50" alt="전체">
+        <img src="https://cdn-icons-png.flaticon.com/512/3580/3580126.png" alt="전체"><br/>
         <span>전체</span>
     </div>
     <div class="category-item" onclick="location.href='/product/Product.do?action=category&prod_category=곡물'">
-        <img src="https://via.placeholder.com/50" alt="곡물">
+        <img src="https://cdn-icons-png.freepik.com/512/898/898133.png" alt="곡물"><br/>
         <span>곡물</span>
     </div>
     <div class="category-item" onclick="location.href='/product/Product.do?action=category&prod_category=과일'">
-        <img src="https://via.placeholder.com/50" alt="과일">
+        <img src="https://cdn-icons-png.flaticon.com/512/2843/2843584.png" alt="과일"><br/>
         <span>과일</span>
     </div>
     <div class="category-item" onclick="location.href='/product/Product.do?action=category&prod_category=버섯'">
-        <img src="https://via.placeholder.com/50" alt="버섯">
+        <img src="https://cdn-icons-png.flaticon.com/512/263/263888.png" alt="버섯"><br/>
         <span>버섯</span>
     </div>
     <div class="category-item" onclick="location.href='/product/Product.do?action=category&prod_category=약재'">
-        <img src="https://via.placeholder.com/50" alt="약재">
+        <img src="https://cdn-icons-png.flaticon.com/256/3186/3186179.png" alt="약재"><br/>
         <span>약재</span>
     </div>
     <div class="category-item" onclick="location.href='/product/Product.do?action=category&prod_category=조미료'">
-        <img src="https://via.placeholder.com/50" alt="조미료">
+        <img src="https://cdn-icons-png.flaticon.com/512/4725/4725913.png" alt="조미료"><br/>
         <span>조미료</span>
     </div>
         <div class="category-item" onclick="location.href='/product/Product.do?action=category&prod_category=채소'">
-        <img src="https://via.placeholder.com/50" alt="채소">
+        <img src="https://cdn-icons-png.flaticon.com/512/6266/6266171.png" alt="채소"><br/>
         <span>채소</span>
     </div>
-    <div class="category-item" onclick="location.href='/product/Product.do?action=category&prod_category=기타'">
-        <img src="https://via.placeholder.com/50" alt="기타">
+<!--     <div class="category-item" onclick="location.href='/product/Product.do?action=category&prod_category=기타'">
+        <img src="https://via.placeholder.com/50" alt="기타"><br/>
         <span>기타</span>
-    </div>
+    </div> -->
 </div>

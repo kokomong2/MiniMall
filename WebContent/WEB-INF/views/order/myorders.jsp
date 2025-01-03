@@ -35,7 +35,7 @@
 		<h1>구매 내역</h1>
 		
 		<c:choose>
-		    <c:when test="${not empty myOrderList}">
+		    <c:when test="${not empty orderList}">
 		        <table>
 		            <thead>
 		                <tr>
@@ -46,17 +46,14 @@
 		                </tr>
 		            </thead>
 		            <tbody>
-		                <c:forEach var="order" items="${orderList}">
-		                <c:out value="${order.orderNum}" /><br>
-		                    <tr>
-		                        <td>${order.orderNum}</td>
-		                        <td>${order.orderDate}</td>
-		                        <td>${order.orderAddress}</td>
-		                        <td>
-		                            <a href="Order.do?action=detail&order_num=${order.orderNum}">상세 보기</a>
-		                        </td>
-		                    </tr>
-		                </c:forEach>
+						<c:forEach var="order" items="${orderList}">
+						    <tr>
+						        <td>${order.orderNum}</td>
+						        <td>${order.orderDate}</td>
+						        <td>${order.orderAddress}</td>
+						        <td><a href="/order/Order.do?action=detail&order_num=${order.orderNum}">상세 보기</a></td>
+						    </tr>
+						</c:forEach>
 		            </tbody>
 		        </table>
 		    </c:when>

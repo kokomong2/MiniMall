@@ -17,4 +17,6 @@ public class OrderDto {
     private Date orderDate;         // 주문 날짜
     private String orderAddress;    // 주문 주소
     private String orderNum;           // 주문 번호
+    private int orderPrice; // 주문 가격
+    private ProductDto product;  
 }

@@ -51,15 +51,43 @@ public class OrderServlet extends HttpServlet {
                 List<OrderDto> orderList = dao.myOrderList(cust_id);
                 request.setAttribute("orderList", orderList);
 
+                if (orderList == null || orderList.isEmpty()) {
+                    System.out.println("No orders found for customer ID: " + cust_id);
+                }
+
                 // 구매 내역 페이지로 포워딩
                 RequestDispatcher disp = request.getRequestDispatcher("/WEB-INF/views/order/myorders.jsp");
                 disp.forward(request, response);
-                System.out.println("Forwarded to myorders.jsp");
-                return; // 추가 코드 실행 방지
+                return; // 추가 실행 방지
             }
+
+            if ("detail".equals(action)) {
+                String orderNum = request.getParameter("order_num");
+                if (orderNum == null || orderNum.isEmpty()) {
+                    request.setAttribute("error", "주문 번호가 제공되지 않았습니다.");
+                    RequestDispatcher disp = request.getRequestDispatcher("/WEB-INF/views/error.jsp");
+                    disp.forward(request, response);
+                    return;
+                }
+
+                System.out.println("Fetching details for orderNum: " + orderNum);
+
+                List<OrderDto> detailList = dao.getOrderDetails(orderNum);
+                request.setAttribute("detailList", detailList);
+                request.setAttribute("orderNum", orderNum);
+
+                // 상세 주문 페이지로 포워딩
+                RequestDispatcher disp = request.getRequestDispatcher("/WEB-INF/views/order/mydetailorder.jsp");
+                disp.forward(request, response);
+                return; // 추가 실행 방지
+            }
+
         } catch (Exception e) {
             e.printStackTrace();
             request.setAttribute("error", e.getMessage());
+            RequestDispatcher disp = request.getRequestDispatcher("/WEB-INF/views/error.jsp");
+            disp.forward(request, response);
+            return; // 추가 실행 방지
         }
 
         // 기본적으로 ordercheck.jsp로 포워딩
@@ -67,70 +95,58 @@ public class OrderServlet extends HttpServlet {
         disp.forward(request, response);
     }
 
+
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        // 요청 파라미터 처리
         request.setCharacterEncoding("utf-8");
 
         // 세션에서 고객 정보 가져오기
         CustomerDto sessionCustomer = (CustomerDto) request.getSession().getAttribute("customer");
         if (sessionCustomer == null || sessionCustomer.getCust_email() == null) {
-            System.out.println("세션 고객 정보 없음");
             response.sendRedirect("/auth/Auth.do?action=loginform");
             return;
         }
 
-        // prodIds와 orderCounts를 배열로 받음
+        // 체크된 상품 데이터만 처리
         String[] prodIdParams = request.getParameterValues("prodId");
         String[] orderCountParams = request.getParameterValues("orderCount");
+        String[] orderPriceParams = request.getParameterValues("orderPrice");
 
         if (prodIdParams == null || prodIdParams.length == 0) {
-            response.getWriter().println("상품 ID가 누락되었습니다!");
+            response.getWriter().println("상품이 선택되지 않았습니다!");
             return;
         }
 
-        // 고객 정보
         String custEmail = sessionCustomer.getCust_email();
         String custAddress = sessionCustomer.getCust_address();
+        List<OrderDto> orderList = new ArrayList<>();
 
-        // 주문 목록
-        List<OrderDto> orderList = new ArrayList<>();  // 주문 목록을 저장할 리스트 생성
-
-        // 각 상품에 대해 처리
         try {
-            System.out.println("Inserting orders to DB...");
-
             for (int i = 0; i < prodIdParams.length; i++) {
                 int prodId = Integer.parseInt(prodIdParams[i]);
-                int orderCount = (orderCountParams != null && orderCountParams.length > i) ? Integer.parseInt(orderCountParams[i]) : 1;
-                String orderNum = new java.text.SimpleDateFormat("yyyyMMddHHmmss").format(new java.util.Date()) + custEmail;
+                int orderCount = Integer.parseInt(orderCountParams[i]);
+                int orderPrice = Integer.parseInt(orderPriceParams[i]);
+                String orderNum = new java.text.SimpleDateFormat("yyyyMMddHHmm").format(new java.util.Date()) + custEmail;
 
-                System.out.println("Received order: prodId=" + prodId + ", orderCount=" + orderCount);
-
-                // 주문 객체 생성
                 OrderDto order = new OrderDto();
                 order.setOrderCount(orderCount);
+                order.setOrderPrice(orderPrice);
                 order.setProdId(prodId);
                 order.setOrderDate(new java.util.Date());
                 order.setOrderAddress(custAddress);
                 order.setOrderNum(orderNum);
 
-                // DB에 주문 삽입
                 dao.insertOrder(order, custEmail);
-                System.out.println("Order for prodId=" + prodId + " successfully inserted");
-
-                // 주문 목록에 추가
                 orderList.add(order);
             }
 
-            // 주문 완료 후 페이지로 포워딩
-            request.setAttribute("orderList", orderList);  // 주문 목록을 request에 저장
+            request.setAttribute("orderList", orderList);
             request.setAttribute("message", "주문이 성공적으로 완료되었습니다.");
             RequestDispatcher disp = request.getRequestDispatcher("/WEB-INF/views/order/ordercheck.jsp");
             disp.forward(request, response);
 
         } catch (Exception e) {
+            e.printStackTrace();
             response.getWriter().println("에러: " + e.getMessage());
-            e.printStackTrace(); // 예외 출력
         }
     }
 }

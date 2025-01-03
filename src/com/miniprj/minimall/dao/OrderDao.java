@@ -57,34 +57,32 @@ public class OrderDao {
         PreparedStatement stmt = null;
 
         try {
-            int customerId = getCustomerIdByEmail(customerEmail); // 이메일로 customerId를 얻어옴
+            int customerId = getCustomerIdByEmail(customerEmail);
             if (customerId == -1) {
                 throw new SQLException("Customer not found for email: " + customerEmail);
             }
 
             con = dataSource.getConnection();
-            if (con == null) {
-                throw new SQLException("Connection failed");
-            }
-
-            String sql = "INSERT INTO Orders (order_count, cust_id, prod_id, order_date, order_address, order_num) VALUES (?, ?, ?, ?, ?, ?)";
+            String sql = "INSERT INTO Orders (order_count, order_price, cust_id, prod_id, order_date, order_address, order_num) " +
+                         "VALUES (?, ?, ?, ?, ?, ?, ?)";
             stmt = con.prepareStatement(sql);
 
             stmt.setInt(1, order.getOrderCount());
-            stmt.setInt(2, customerId); // 고객 ID를 삽입
-            stmt.setInt(3, order.getProdId());
-            stmt.setDate(4, new java.sql.Date(order.getOrderDate().getTime()));
-            stmt.setString(5, order.getOrderAddress());
-            stmt.setString(6, order.getOrderNum());
+            stmt.setInt(2, order.getOrderPrice());
+            stmt.setInt(3, customerId);
+            stmt.setInt(4, order.getProdId());
+            stmt.setDate(5, new java.sql.Date(order.getOrderDate().getTime()));
+            stmt.setString(6, order.getOrderAddress());
+            stmt.setString(7, order.getOrderNum());
 
             int rowsAffected = stmt.executeUpdate();
-            System.out.println("Rows affected: " + rowsAffected);  // 디버깅용
+            System.out.println("Rows affected: " + rowsAffected);
+
         } catch (SQLException e) {
             e.printStackTrace();
-            throw new SQLException("DB 쿼리 실행 실패: " + e.getMessage()); // 더 자세한 에러 메시지 추가
+            throw new SQLException("DB 쿼리 실행 실패: " + e.getMessage());
         } finally {
-            if (stmt != null) stmt.close();
-            if (con != null) con.close();
+            closeResources(null, stmt, con);
         }
     }
 
@@ -119,8 +117,15 @@ public class OrderDao {
             pstmt = con.prepareStatement(sql);
             pstmt.setInt(1, cust_id);  // cust_id 바인딩
             rs = pstmt.executeQuery();
-
+            // 확인~~~~~~~~~~
             System.out.println("Executing myOrderList for cust_id: " + cust_id);
+            System.out.println("SQL: " + sql);
+            System.out.println("Fetching orders for cust_id: " + cust_id);
+            System.out.println("Order List Size: " + orderList.size());
+            for (OrderDto order : orderList) {
+                System.out.println("Order: " + order.getOrderNum());
+            }
+            
             while (rs.next()) {
                 OrderDto myOrder = new OrderDto();
                 
@@ -139,5 +144,59 @@ public class OrderDao {
         }
         return orderList;
     }
+    
+    public List<OrderDto> getOrderDetails(String orderNum) throws SQLException {
+        List<OrderDto> detailList = new ArrayList<>();
+        Connection con = null;
+        PreparedStatement pstmt = null;
+        ResultSet rs = null;
+
+        try {
+            System.out.println("orderNum: " + orderNum); // 파라미터 로그
+            con = dataSource.getConnection();
+            System.out.println("DB 연결 성공");
+
+            String sql = "SELECT o.prod_id, p.prod_goods_name, o.order_count, o.order_price, o.order_address " +
+                         "FROM orders o " +
+                         "JOIN product p ON o.prod_id = p.prod_id " +
+                         "WHERE o.order_num = ?";
+            pstmt = con.prepareStatement(sql);
+            pstmt.setString(1, orderNum);
+
+            System.out.println("SQL 실행: " + pstmt.toString());
+            rs = pstmt.executeQuery();
+
+            while (rs.next()) {
+                OrderDto orderDetail = new OrderDto();
+                ProductDto productDetail = new ProductDto();
+
+                // ResultSet에서 데이터 가져오기
+                orderDetail.setProdId(rs.getInt("prod_id"));
+                orderDetail.setOrderCount(rs.getInt("order_count"));
+                orderDetail.setOrderPrice(rs.getInt("order_price"));
+                orderDetail.setOrderAddress(rs.getString("order_address"));
+
+                // ProductDto 설정
+                productDetail.setProdGoodsName(rs.getString("prod_goods_name"));
+                orderDetail.setProduct(productDetail);
+
+                // 리스트에 추가
+                detailList.add(orderDetail);
+            }
+
+            System.out.println("조회된 주문 상세 수: " + detailList.size());
+        } catch (SQLException e) {
+            System.err.println("SQL 예외 발생: " + e.getMessage());
+            throw e;
+        } finally {
+            closeResources(rs, pstmt, con);
+        }
+
+        return detailList;
+    }
+
+
+    
+    
 
 }

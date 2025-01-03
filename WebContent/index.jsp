@@ -4,38 +4,37 @@
 <head>
     <meta charset="UTF-8">
     <title>농산물 마켓</title>
-    <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-
-        body {
-            font-family: 'Arial', sans-serif;
-            line-height: 1.6;
-            background-color: #f9f9f9;
-        }
-
-        main {
-            padding: 2rem;
-        }
-
-        h1 {
-            text-align: center;
-            margin-bottom: 1rem;
-        }
-
-        .category-container, .products-container {
-            margin-bottom: 2rem;
-        }
-    </style>
+    <link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/css/index.css">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
 </head>
 <body>
     <!-- 헤더 포함 -->
     <jsp:include page="/WEB-INF/views/header.jsp" />
 
-    <!-- 메인 콘텐츠 -->
+
+        <div id="carouselExampleControls" class="carousel slide" data-bs-ride="carousel">
+            <div class="carousel-inner">
+                <div class="carousel-item active">
+                    <img src="https://www.shutterstock.com/image-vector/online-training-web-banner-design-260nw-1944239320.jpg" class="d-block w-100" alt="...">
+                </div>
+                <div class="carousel-item">
+                    <img src="https://www.shutterstock.com/image-vector/online-training-web-banner-design-260nw-1944239320.jpg" class="d-block w-100" alt="...">
+                </div>
+                <div class="carousel-item">
+                    <img src="https://www.shutterstock.com/image-vector/online-training-web-banner-design-260nw-1944239320.jpg" class="d-block w-100" alt="...">
+                </div>
+            </div>
+            <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleControls" data-bs-slide="prev">
+                <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                <span class="visually-hidden">Previous</span>
+            </button>
+            <button class="carousel-control-next" type="button" data-bs-target="#carouselExampleControls" data-bs-slide="next">
+                <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                <span class="visually-hidden">Next</span>
+            </button>
+        </div>
+            <!-- 메인 콘텐츠 -->
     <main>
         <h1>Top Category</h1>
         <jsp:include page="/WEB-INF/views/product/topcategory.jsp" />

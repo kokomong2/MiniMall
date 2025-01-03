@@ -128,7 +128,7 @@
         }
 
         function updateCartQuantity(cartId, quantity) {
-            fetch('/Cart.do', {
+            fetch('/cart/Cart.do', {
                 method: 'POST',
                 body: new URLSearchParams({
                     action: 'updateCart',
@@ -158,6 +158,49 @@
 
             changeTotalPayment();
         });
+        
+        function submitCheckedItems() {
+            const form = document.getElementById("orderForm");
+            const checkboxes = document.querySelectorAll('.item-checkbox');
+
+            // 기존에 추가된 hidden input 제거
+            const existingInputs = form.querySelectorAll("input[name='prodId'], input[name='orderCount'], input[name='orderPrice']");
+            existingInputs.forEach(input => input.remove());
+
+            // 체크된 항목만 처리
+            checkboxes.forEach((checkbox) => {
+                if (checkbox.checked) {
+                    const row = checkbox.closest("tr");
+                    if (!row) return;
+
+                    // 현재 행의 데이터를 가져오기
+                    const prodId = row.querySelector(".prodId").value;
+                    const orderCount = row.querySelector(".quantity-input").value;
+                    const orderPrice = row.querySelector(".total-price").innerText.replace("원", "").trim();
+
+                    // Hidden input 생성
+                    const prodIdInput = document.createElement("input");
+                    prodIdInput.type = "hidden";
+                    prodIdInput.name = "prodId";
+                    prodIdInput.value = prodId;
+                    form.appendChild(prodIdInput);
+
+                    const orderCountInput = document.createElement("input");
+                    orderCountInput.type = "hidden";
+                    orderCountInput.name = "orderCount";
+                    orderCountInput.value = orderCount;
+                    form.appendChild(orderCountInput);
+
+                    const orderPriceInput = document.createElement("input");
+                    orderPriceInput.type = "hidden";
+                    orderPriceInput.name = "orderPrice";
+                    orderPriceInput.value = orderPrice;
+                    form.appendChild(orderPriceInput);
+                }
+            });
+
+            form.submit();
+        }
     </script>
 </head>
 <body>
@@ -181,41 +224,42 @@
 	                <th>삭제</th>
 	            </tr>
 	        </thead>
-	        <tbody>
-	            <c:forEach var="item" items="${cartList}">
-	                <tr>
-	                    <td><input type="checkbox" name="cartIds" value="${item.cartId}" class="item-checkbox" /></td>
-	                    <td><img src="${item.product.prodImageUrl}" alt="상품 이미지" class="product-image" /></td>
-	                    <td>${item.product.prodId}</td>
-	                    <td>${item.product.prodModelName}</td>
-	                    <td class="product-price">${item.product.prodSalePrice}</td>
-	                    <td><input type="number" name="quantities" value="${item.cartCount}" min="0" class="quantity-input" /></td>
-	                    <td class="total-price">${item.product.prodSalePrice * item.cartCount}원</td>
-	                    <td>
-	                        <form method="post" action="/cart/Cart.do">
-	                            <input type="hidden" name="cartId" value="${item.cartId}" />
-	                            <input type="hidden" name="action" value="removeCart" />
-	                            <button type="submit">삭제</button>
-	                        </form>
-	                    </td>
-	                </tr>
-	            </c:forEach>
-	        </tbody>
+				<tbody>
+				    <c:forEach var="item" items="${cartList}">
+				        <tr>
+				            <td><input type="checkbox" name="cartIds" value="${item.cartId}" class="item-checkbox" /></td>
+				            <td><img src="${item.product.prodImageUrl}" alt="상품 이미지" class="product-image" /></td>
+				            <td><input type="hidden" class="prodId" value="${item.product.prodId}" />${item.product.prodId}</td>
+				            <td>${item.product.prodModelName}</td>
+				            <td class="product-price">${item.product.prodSalePrice}</td>
+				            <td><input type="number" class="quantity-input" value="${item.cartCount}" min="1" /></td>
+				            <td class="total-price">${item.product.prodSalePrice * item.cartCount}원</td>
+				            <td>
+				                <form method="post" action="/cart/Cart.do">
+				                    <input type="hidden" name="cartId" value="${item.cartId}" />
+				                    <input type="hidden" name="action" value="removeCart" />
+				                    <button type="submit">삭제</button>
+				                </form>
+				            </td>
+				        </tr>
+				    </c:forEach>
+				</tbody>
 	    </table>
 	
 	    <div id="total-payment">0원</div>
 	
-	    <div class="button-container">
-	        <form action="/order/Order.do" method="post">
-	            <input type="hidden" name="action" value="buy">
-	            <c:forEach var="item" items="${cartList}">
-	                <input type="hidden" name="prodId" value="${item.product.prodId}" />
-	                <input type="hidden" name="orderCount" value="${item.cartCount}" />
-	            </c:forEach>
-	            <input type="hidden" name="customerEmail" value="${sessionScope.customer.cust_email}" />
-	            <button type="submit" class="buy-button">구매하기</button>
-	        </form>
-	    </div>
+		<div class="button-container">
+		    <form id="orderForm" action="/order/Order.do" method="post">
+		        <input type="hidden" name="action" value="buy">
+		        <c:forEach var="item" items="${cartList}">
+		            <input type="hidden" class="prodId" value="${item.product.prodId}" />
+		            <input type="hidden" class="orderCount" value="${item.cartCount}" />
+		            <input type="hidden" class="orderPrice" value="${item.product.prodSalePrice * item.cartCount}" />
+		        </c:forEach>
+		        <input type="hidden" name="customerEmail" value="${sessionScope.customer.cust_email}" />
+		        <button type="button" class="buy-button" onclick="submitCheckedItems()">구매하기</button>
+		    </form>
+		</div>
 	</main>
 	
 	<jsp:include page="/WEB-INF/views/footer.jsp" />
