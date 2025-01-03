@@ -1,5 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt" %>
 <!DOCTYPE html>
 <html>
 <head>
@@ -8,70 +9,69 @@
 <style>
     table {
         width: 100%;
-        border-collapse: collapse;
-        margin: 20px 0;
+        margin-bottom: 20px;
+        background-color: transparent;
+        border-collapse: separate;
+        border-spacing: 0 20px;
     }
-    th, td {
-        padding: 10px;
-        border: 1px solid #ddd;
-        text-align: center;
+    tr {
+        background-color: #fff;
     }
-    th {
-        background-color: #f4f4f4;
-    }
-    tr:nth-child(even) {
-        background-color: #f9f9f9;
-    }
-    tr:hover {
-        background-color: #f1f1f1;
+    td {
+        padding: 20px;
+        border-top: 1.5px solid #000;
+        border-bottom: 1.5px solid #000;
     }
     img {
-    	height: 100px;
-    	width: 100px;
+        height: 130px;
+        width: 130px;
+    }
+    #wrapper {
+        margin: 0 auto;
+        display: block;
+        width: 700px;
     }
 </style>
 </head>
 <body>
     <jsp:include page="/WEB-INF/views/header.jsp" />
     <main>
-        <h1>주문 상세 내역</h1>
-        <p>주문 번호: ${orderNum}</p>
-        
-        <c:choose>
-            <c:when test="${not empty detailList}">
-                <table>
-                    <thead>
-                        <tr>
-                            <th>상품 ID</th>
-                            <th>상품 이미지</th>
-                            <th>상품명</th>
-                            <th>수량</th>
-                            <th>가격</th>
-                            <th>배송지</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-						<c:forEach var="detail" items="${detailList}">
-						    <tr>
-						        <td>${detail.prodId}</td>
-								<td>
-							        <a href="/product/Product.do?action=detailform&prod_id=${detail.prodId}">
-						                <img src="${detail.product.prodImageUrl}" alt="Product Image">
-						            </a>								
-								</td>
-						        <td>${detail.product.prodGoodsName}</td>
-						        <td>${detail.orderCount}</td>
-						        <td>${detail.orderPrice}</td>
-						        <td>${detail.orderAddress}</td>
-						    </tr>
-						</c:forEach>
-                    </tbody>
-                </table>
-            </c:when>
-            <c:otherwise>
-                <p>주문 상세 내역이 없습니다.</p>
-            </c:otherwise>
-        </c:choose>
+        <div id="wrapper">
+            <h1>주문 상세 내역</h1>
+            <p style="color:#6E6E6E">주문 번호: ${orderNum}</p>
+            <p style="color:#6E6E6E">배송지: ${orderAddress}</p>
+            <br>
+            <div style="font-size:20px; font-weight: bold;">주문 상품</div>
+            <c:choose>
+                <c:when test="${not empty detailList}">
+                    <table>
+                        <tbody>
+                            <c:forEach var="detail" items="${detailList}">
+                                <tr>
+                                    <td>
+                                        <a href="/product/Product.do?action=detailform&prod_id=${detail.prodId}">
+                                            <img src="${detail.product.prodImageUrl}" alt="Product Image">
+                                        </a>
+                                    </td>
+                                    <td style="text-align:left">
+                                        <div style="font-size:13px; margin-bottom: 5px;">No. ${detail.prodId}</div>
+                                        <div style="font-weight: bold; margin-bottom: 5px;">${detail.product.prodGoodsName}</div>
+                                        
+                                    </td>
+                                    <td>X ${detail.orderCount}</td>
+                                    <td>
+                                        <fmt:formatNumber value="${detail.orderPrice}" type="number" groupingUsed="true" /> 원
+                                    </td>
+                                </tr>
+                            </c:forEach>
+                        </tbody>
+                    </table>
+                </c:when>
+                <c:otherwise>
+                    <p>주문 상세 내역이 없습니다.</p>
+                </c:otherwise>
+            </c:choose>
+        </div>
     </main>
     <jsp:include page="/WEB-INF/views/footer.jsp" />
 </body>

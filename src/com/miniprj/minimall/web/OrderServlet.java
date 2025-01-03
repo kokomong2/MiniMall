@@ -72,7 +72,15 @@ public class OrderServlet extends HttpServlet {
 
                 System.out.println("Fetching details for orderNum: " + orderNum);
 
+                // 주문 상세 내역 조회
                 List<OrderDto> detailList = dao.getOrderDetails(orderNum);
+
+                if (detailList != null && !detailList.isEmpty()) {
+                    // 첫 번째 아이템에서 배송지 정보 가져오기 (같은 주문 번호라면 동일한 배송지 사용)
+                    String orderAddress = detailList.get(0).getOrderAddress();
+                    request.setAttribute("orderAddress", orderAddress);
+                }
+
                 request.setAttribute("detailList", detailList);
                 request.setAttribute("orderNum", orderNum);
 
